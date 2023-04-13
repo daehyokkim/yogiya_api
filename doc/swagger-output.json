@@ -15,11 +15,22 @@
       "get": {
         "description": "",
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/sign/sendCode": {
+      "post": {
+        "description": "",
+        "parameters": [],
         "responses": {}
       }
     },
-    "/test": {
-      "get": {
+    "/sign/verifyCode": {
+      "post": {
         "description": "",
         "parameters": [],
         "responses": {}
