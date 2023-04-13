@@ -1,4 +1,4 @@
-import post__sendCode from "./post_sendcode.js";
+import post__sendCode from "./post__sendcode.js";
 
 export default {
   post: { sendconde: post__sendCode },
