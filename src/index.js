@@ -7,9 +7,10 @@ import cors from "cors";
 
 //test_library
 import swaggerUi from "swagger-ui-express";
-import swaggerFile from "./doc_v1.json" assert { type: "json" };
+import swaggerFile from "../doc/swagger-output.json" assert { type: "json" };
 
 import express from "express";
+import session, { MemoryStore, Store } from "express-session";
 const app = express();
 
 app.use(express.json());
@@ -21,8 +22,22 @@ app.use(
   })
 );
 
-if (process.env.NODE_ENV == "test")
-  app.use("/doc", swaggerUi.server, swaggerUi.setup(swaggerFile));
+const maxAge = 60 * 1000;
+app.use(
+  session({
+    secret: "sol1357@$^",
+    resave: false,
+    saveUninitialized: true,
+    store: new MemoryStore({ checkPeriod: maxAge }),
+    cookie: {
+      maxAge: maxAge,
+    },
+  })
+);
+var options = {
+  explorer: true,
+};
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile, options));
 
 app.use("/api", api);
 

@@ -19,7 +19,11 @@ const post__sendCode = async (req, res, next) => {
 
     const hash = bcrypt.hashSync(`${verifyCode}`, 8);
     //express.session에 verifyEmail{email,otp:hash저장}
-
+    req.session.verifyEmail = {
+      email,
+      otp: hash,
+    };
+    console.log(req.session.verifyEmail);
     const VERIFY_MESSAGE = `<div id="readFrame">
     <table
       style="text-align: center; border: 5px solid #eee"
@@ -100,16 +104,24 @@ const post__sendCode = async (req, res, next) => {
   </div>
   `;
 
-    const mailOption = {
-      from: process.env.MAIL_ID,
-      to: email,
-      subject: "email validation",
-      html: VERIFY_MESSAGE,
-      tesx: "인증메일입니다.",
-    };
-    const info = await transporter.sendMail(mailOption);
-    console.log(info);
-    return res.status(200).json({ success: true });
+    // const mailOption = {
+    //   from: process.env.MAIL_ID,
+    //   to: email,
+    //   subject: "email validation",
+    //   html: VERIFY_MESSAGE,
+    //   tesx: "인증메일입니다.",
+    // };
+    // const info = await transporter.sendMail(mailOption);
+    console.log(verifyCode);
+    setTimeout(() => {
+      console.log(`delete Session ${req.session.verifyEmai}`);
+      delete req.session.verifyEmail?.otp;
+      console.log(`after delete Session ${req.session.verifyEmail}`);
+    }, 1000 * 60 * 10);
+    return res.status(200).json({
+      error: false,
+      message: "SUCCESS",
+    });
   } catch (e) {
     console.log(e);
   }
