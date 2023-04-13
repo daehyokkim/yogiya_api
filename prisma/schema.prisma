@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int         @id @default(autoincrement())
+  email       String      @unique
+  nickname    String
+  password    String
+  googleflage Boolean     @default(false)
+  createAt    DateTime    @default(now())
+  updateAt    DateTime?
+  DeviceInfo  DeviceInfo?
+  FriendInfo  FriendInfo?
+  Profile     Profile?
+}
+
+model Profile {
+  id       Int    @id @default(autoincrement())
+  userId   Int    @unique
+  filePath String @db.VarChar(255)
+  fileType String @db.VarChar(127)
+  fileSize Int    @default(0)
+  User     User   @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "User_Fk")
+}
+
+model DeviceInfo {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique
+  latitude  Float
+  longitude Float
+  battery   Int
+  speedId   Int
+  SpeedType SpeedType @relation(fields: [speedId], references: [id])
+  User      User      @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "User_Fk")
+  @@index([speedId], map: "SpeedType_Fk")
+}
+
+model SpeedType {
+  id         Int          @id @default(autoincrement())
+  type       String
+  isFlag     Boolean      @default(true)
+  DeviceInfo DeviceInfo[]
+}
+
+model FriendInfo {
+  id     Int    @id @default(autoincrement())
+  userId Int    @unique
+  list   String @db.LongText
+  User   User   @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "User_Fk")
+}
+
+model Setting {
+  id    Int    @id @default(autoincrement())
+  key   String @default("") @db.VarChar(50)
+  param String @default("") @db.VarChar(50)
+  value String @default("") @db.VarChar(1024)
+
+  @@unique([key, param], name: "key_param")
+}
+
+model Board {
+  id       Int      @id @default(autoincrement())
+  bsId     Int
+  title    String   @db.VarChar(50)
+  content  String   @db.Text
+  CreateAt DateTime @default(now())
+}
