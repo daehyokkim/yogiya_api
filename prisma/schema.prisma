@@ -18,13 +18,14 @@ model User {
   DeviceInfo  DeviceInfo?
   FriendInfo  FriendInfo?
   Profile     Profile?
+  UserExtra   UserExtra?
 }
 
 model Profile {
   id       Int    @id @default(autoincrement())
   userId   Int    @unique
-  filePath String @db.VarChar(255)
-  fileType String @db.VarChar(127)
+  filePath String @default("0") @db.VarChar(255)
+  fileType String @default("0") @db.VarChar(127)
   fileSize Int    @default(0)
   User     User   @relation(fields: [userId], references: [id])
 
@@ -32,14 +33,14 @@ model Profile {
 }
 
 model DeviceInfo {
-  id        Int       @id @default(autoincrement())
-  userId    Int       @unique
-  latitude  Float
-  longitude Float
-  battery   Int
-  speedId   Int
-  SpeedType SpeedType @relation(fields: [speedId], references: [id])
-  User      User      @relation(fields: [userId], references: [id])
+  id        Int        @id @default(autoincrement())
+  userId    Int        @unique
+  latitude  Float?
+  longitude Float?
+  battery   Int?
+  speedId   Int?
+  SpeedType SpeedType? @relation(fields: [speedId], references: [id], onDelete: Restrict)
+  User      User       @relation(fields: [userId], references: [id])
 
   @@index([userId], map: "User_Fk")
   @@index([speedId], map: "SpeedType_Fk")
@@ -53,10 +54,10 @@ model SpeedType {
 }
 
 model FriendInfo {
-  id     Int    @id @default(autoincrement())
-  userId Int    @unique
-  list   String @db.LongText
-  User   User   @relation(fields: [userId], references: [id])
+  id     Int     @id @default(autoincrement())
+  userId Int     @unique
+  list   String? @db.LongText
+  User   User    @relation(fields: [userId], references: [id])
 
   @@index([userId], map: "User_Fk")
 }
@@ -76,4 +77,12 @@ model Board {
   title    String   @db.VarChar(50)
   content  String   @db.Text
   CreateAt DateTime @default(now())
+}
+
+model UserExtra {
+  id          Int     @id @default(autoincrement()) @db.UnsignedInt
+  userId      Int     @unique(map: "Unique")
+  refeshToken String? @db.VarChar(256)
+  fcmToken    String? @db.VarChar(256)
+  User        User    @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Usert_FK")
 }
