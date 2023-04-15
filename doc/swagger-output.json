@@ -247,6 +247,61 @@
           }
         }
       }
+    },
+    "/sign/signOut": {
+      "post": {
+        "summary": "로그아웃 API",
+        "description": "  ** 로그아웃 API 입니다. ** <br/><br/>  ",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "회정 정보",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refershToken": {
+                  "type": "string",
+                  "example": "반환할 리프레시 토큰 전송"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "** 로그아웃 결과**",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": true
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "잘못된 접근시",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
