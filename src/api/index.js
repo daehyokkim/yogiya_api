@@ -1,5 +1,5 @@
 import { Router } from "express";
-import sign from "./sign/index.js";
+import sign from "./sign/sgin.contoller.js";
 
 const router = Router();
 
