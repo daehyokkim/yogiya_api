@@ -3,7 +3,7 @@ import createHttpError from "http-errors";
 
 import prisma from "../../prisma.js";
 const post__sign_up = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, nickname = "test" } = req.body;
   try {
     console.log(req.session.verifyEmail);
     //오류처리
@@ -25,7 +25,7 @@ const post__sign_up = async (req, res, next) => {
       data: {
         email: email,
         password: hash,
-        nickname: "test",
+        nickname: nickname,
       },
     });
 

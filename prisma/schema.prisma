@@ -80,9 +80,9 @@ model Board {
 }
 
 model UserExtra {
-  id          Int     @id @default(autoincrement()) @db.UnsignedInt
-  userId      Int     @unique(map: "Unique")
-  refeshToken String? @db.VarChar(256)
-  fcmToken    String? @db.VarChar(256)
-  User        User    @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Usert_FK")
+  id           Int     @id @default(autoincrement()) @db.UnsignedInt
+  userId       Int     @unique(map: "Unique")
+  refershToken String? @unique(map: "refershToken_unique") @db.VarChar(256)
+  fcmToken     String? @db.VarChar(256)
+  User         User    @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Usert_FK")
 }

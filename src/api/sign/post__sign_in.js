@@ -48,7 +48,7 @@ const post_sign_up = async (req, res, next) => {
     await prisma.userExtra.update({
       where: { userId: user.id },
       data: {
-        refeshToken: refershToken,
+        refershToken: refershToken,
       },
     });
 

@@ -183,4 +183,40 @@ router.post(
     }
 */
 );
+router.post(
+  "/signOut",
+  signCtrl.post.sing_out
+  /*
+      #swagger.summary = "로그아웃 API"
+      #swagger.description = '
+      ** 로그아웃 API 입니다. ** <br/><br/>
+      '
+      #swagger.parameters['obj']= {
+  
+          in : 'body',
+          name : 'body',
+          description : '회정 정보',
+          required : true,
+          schema :{
+            refershToken : "반환할 리프레시 토큰 전송"
+          }
+  
+      }
+      
+      #swagger.responses[200] = {
+          description : '** 로그아웃 결과**',
+          schema:{
+            ok : true
+          }
+      }
+  
+      #swagger.responses[500] = {
+          description: '잘못된 접근시',
+          schema:{
+              error: true,
+          }
+      }
+  */
+);
+
 export default router;
