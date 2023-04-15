@@ -31,7 +31,7 @@ const post__sign_up = async (req, res, next) => {
 
     return res.status(200).json({
       error: false,
-      message: "SUCCESS SING_UP",
+      message: "SUCCESS SIGN_UP",
     });
   } catch (e) {
     console.log(e);
