@@ -103,16 +103,19 @@ const post__sendCode = async (req, res, next) => {
     </table>
   </div>
   `;
+    if (process.env.NODE_ENV !== "test") {
+      const mailOption = {
+        from: process.env.MAIL_ID,
+        to: email,
+        subject: "email validation",
+        html: VERIFY_MESSAGE,
+        tesx: "인증메일입니다.",
+      };
+      const info = await transporter.sendMail(mailOption);
+    } else {
+      console.log(verifyCode);
+    }
 
-    // const mailOption = {
-    //   from: process.env.MAIL_ID,
-    //   to: email,
-    //   subject: "email validation",
-    //   html: VERIFY_MESSAGE,
-    //   tesx: "인증메일입니다.",
-    // };
-    // const info = await transporter.sendMail(mailOption);
-    console.log(verifyCode);
     setTimeout(() => {
       console.log(`delete Session ${req.session.verifyEmai}`);
       delete req.session.verifyEmail?.otp;
