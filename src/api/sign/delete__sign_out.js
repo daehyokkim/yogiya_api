@@ -1,6 +1,6 @@
 import prisma from "../../prisma.js";
 
-const post__sign_out = async (req, res, next) => {
+const delete__sign_out = async (req, res, next) => {
   try {
     const { refershToken } = req.body;
 
@@ -17,4 +17,4 @@ const post__sign_out = async (req, res, next) => {
   }
 };
 
-export default post__sign_out;
+export default delete__sign_out;
