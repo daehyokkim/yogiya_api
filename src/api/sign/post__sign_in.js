@@ -1,7 +1,7 @@
 import {
   generateAccessToken,
-  generateRefershToken,
-  verifyrefershToken,
+  generateRefreshToken,
+  verifyRefreshToken,
 } from "../../utiles/jwt.js";
 import { replaceHash } from "../../utiles/replaceHash.js";
 import prisma from "../../prisma.js";
@@ -36,10 +36,10 @@ const post_sign_up = async (req, res, next) => {
     }
 
     const accessToken = generateAccessToken(email);
-    const refershToken = generateRefershToken(email);
-    const verifiedRefershToken = verifyrefershToken(refershToken);
+    const refreshToken = generateRefreshToken(email);
+    const verifiedRefreshToken = verifyRefreshToken(refreshToken);
 
-    if (!verifiedRefershToken || !verifiedRefershToken.exp) {
+    if (!verifiedRefreshToken || !verifiedRefreshToken.exp) {
       return res
         .status(500)
         .json({ error: true, message: "Internal Server Error" });
@@ -48,7 +48,7 @@ const post_sign_up = async (req, res, next) => {
     await prisma.userExtra.update({
       where: { userId: user.id },
       data: {
-        refershToken: refershToken,
+        refreshToken: refreshToken,
       },
     });
 
@@ -56,7 +56,7 @@ const post_sign_up = async (req, res, next) => {
       error: false,
       data: {
         accessToken: accessToken,
-        refeshToken: refershToken,
+        refreshToken: refreshToken,
       },
     });
   } catch (e) {
