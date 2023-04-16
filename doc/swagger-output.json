@@ -139,7 +139,7 @@
                       "type": "string",
                       "example": "엑세스토큰"
                     },
-                    "refeshToken": {
+                    "refreshToken": {
                       "type": "string",
                       "example": "리프레쉬토큰"
                     }
@@ -176,7 +176,7 @@
     "/sign/out": {
       "delete": {
         "summary": "로그아웃 API",
-        "description": "  ** 로그아웃 API 입니다. ** <br/><br/>  ",
+        "description": "  ** 로그아웃 API 입니다. ** <br/><br/>  로그아웃으로 해뒀는데... 이부분은 회원탈퇴로 바꿀까... 고민  ",
         "parameters": [
           {
             "name": "body",
@@ -186,7 +186,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "refershToken": {
+                "refreshToken": {
                   "type": "string",
                   "example": "반환할 리프레시 토큰 전송"
                 }

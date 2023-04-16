@@ -2,12 +2,12 @@ import prisma from "../../prisma.js";
 
 const delete__sign_out = async (req, res, next) => {
   try {
-    const { refershToken } = req.body;
+    const { refreshToken } = req.body;
 
     await prisma.userExtra.update({
-      where: { refershToken: refershToken },
+      where: { refreshToken: refreshToken },
       data: {
-        refershToken: null,
+        refreshToken: null,
       },
     });
 

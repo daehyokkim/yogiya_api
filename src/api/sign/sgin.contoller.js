@@ -82,7 +82,7 @@ router.post(
         error: false,
         data: {
             accessToken: "엑세스토큰",
-            refeshToken: "리프레쉬토큰",
+            refreshToken: "리프레쉬토큰",
             },
         }
     }
@@ -103,6 +103,7 @@ router.delete(
       #swagger.summary = "로그아웃 API"
       #swagger.description = '
       ** 로그아웃 API 입니다. ** <br/><br/>
+      로그아웃으로 해뒀는데... 이부분은 회원탈퇴로 바꿀까... 고민
       '
       #swagger.parameters['obj']= {
   
@@ -111,7 +112,7 @@ router.delete(
           description : '회정 정보',
           required : true,
           schema :{
-            refershToken : "반환할 리프레시 토큰 전송"
+            refreshToken : "반환할 리프레시 토큰 전송"
           }
   
       }
