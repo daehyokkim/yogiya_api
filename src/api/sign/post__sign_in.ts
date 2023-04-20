@@ -2,12 +2,13 @@ import {
   generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
-} from "../../utiles/jwt.js";
-import { replaceHash } from "../../utiles/replaceHash.js";
-import prisma from "../../prisma.js";
+} from "../../utiles/jwt";
+import { replaceHash } from "../../utiles/replaceHash";
+import prisma from "../../prisma";
 import bcrypt from "bcrypt";
-
-const post_sign_up = async (req, res, next) => {
+import { Request, Response } from "express";
+import { JwtPayload } from "jsonwebtoken";
+const post_sign_up = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   console.log(email);
   try {
@@ -27,7 +28,7 @@ const post_sign_up = async (req, res, next) => {
       });
     }
 
-    const rhash = replaceHash(user.password);
+    const rhash: any = replaceHash(user.password);
     if (!bcrypt.compareSync(password, rhash)) {
       return res.status(200).json({
         error: true,
@@ -37,8 +38,8 @@ const post_sign_up = async (req, res, next) => {
 
     const accessToken = generateAccessToken(email);
     const refreshToken = generateRefreshToken(email);
-    const verifiedRefreshToken = verifyRefreshToken(refreshToken);
-
+    const verifiedRefreshToken = verifyRefreshToken(refreshToken) as JwtPayload;
+    console.log(verifiedRefreshToken);
     if (!verifiedRefreshToken || !verifiedRefreshToken.exp) {
       return res
         .status(500)
@@ -61,6 +62,7 @@ const post_sign_up = async (req, res, next) => {
     });
   } catch (e) {
     console.log(e);
+    return res.status(500);
   }
 };
 

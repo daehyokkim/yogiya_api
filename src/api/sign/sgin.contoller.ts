@@ -1,5 +1,5 @@
 import { Router } from "express";
-import signCtrl from "./sign.ctrl.js";
+import signCtrl from "./sign.ctrl";
 const router = Router();
 
 router.post(

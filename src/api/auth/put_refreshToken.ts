@@ -1,12 +1,15 @@
-import prisma from "../../prisma.js";
+import { JwtPayload } from "jsonwebtoken";
+import prisma from "../../prisma";
 import {
   paresJwt,
   generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
-} from "../../utiles/jwt.js";
+} from "../../utiles/jwt";
 import dayjs from "dayjs";
-const put__refreshToken = async (req, res, next) => {
+import { Request, Response } from "express";
+
+const put__refreshToken = async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
     const accessToken = req.headers.authorization?.split("Bearer ")[1];
@@ -24,20 +27,20 @@ const put__refreshToken = async (req, res, next) => {
         .json({ error: true, message: "토큰이 올바르지 않습니다." });
     }
 
-    const newAccessToken = generateAccessToken(decodedAccessToken.data);
-    const decodedRefreshToken = verifyRefreshToken(refreshToken);
+    const newAccessToken: string = generateAccessToken(decodedAccessToken.data);
+    const decodedRefreshToken = verifyRefreshToken(refreshToken) as JwtPayload;
     if (!decodedRefreshToken || !decodedAccessToken.exp) {
       return res.status(500).json({
         error: true,
         message: "서버 오류",
       });
     }
-    if (decodedRefreshToken.exp * 1000 < new Data().getTime()) {
+    if (decodedRefreshToken.exp! * 1000 < new Date().getTime()) {
       return res
         .status(400)
         .json({ error: true, message: "토큰이 만료되었습니다." });
     } else if (
-      dayjs(decodedRefreshToken.exp * 1000).diff(dayjs(), "weeks") < 2
+      dayjs(decodedRefreshToken.exp! * 1000).diff(dayjs(), "weeks") < 2
     ) {
       const newRefreshToken = generateRefreshToken(
         decodedAccessToken.data.persist
@@ -69,6 +72,7 @@ const put__refreshToken = async (req, res, next) => {
     });
   } catch (e) {
     console.log(e);
+    return res.status(500);
   }
 };
 

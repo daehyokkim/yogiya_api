@@ -1,6 +1,6 @@
-import prisma from "../../prisma.js";
-
-const delete__sign_out = async (req, res, next) => {
+import prisma from "../../prisma";
+import { Request, Response } from "express";
+const delete__sign_out = async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
 
@@ -14,6 +14,7 @@ const delete__sign_out = async (req, res, next) => {
     return res.status(200).json({ ok: true });
   } catch (e) {
     console.log(e);
+    return res.status(500);
   }
 };
 
