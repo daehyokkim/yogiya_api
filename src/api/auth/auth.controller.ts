@@ -1,5 +1,5 @@
 import { Router } from "express";
-import authCtrl from "./auth.ctrl.js";
+import authCtrl from "./auth.ctrl";
 const router = Router();
 router.post(
   "/send-code",

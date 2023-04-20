@@ -1,16 +1,15 @@
 import bcrypt from "bcrypt";
-import createHttpError from "http-errors";
-
-import prisma from "../../prisma.js";
-const post__sign_up = async (req, res, next) => {
+// import createHttpError from "http-errors";
+import { Request, Response } from "express";
+import prisma from "../../prisma";
+import { CustomSession } from "../../../interface";
+const post__sign_up = async (req: Request, res: Response) => {
   const { email, password, nickname = "test" } = req.body;
+
+  let session: CustomSession = req.session;
   try {
-    console.log(req.session.verifyEmail);
     //오류처리
-    if (
-      req.session.verifyEmail?.email !== email ||
-      !req.session.verifyEmail?.verified
-    ) {
+    if (session.verifyEmail.email !== email || !session.verifyEmail.verified) {
       return res.status(400).json({
         error: true,
         message: "VERIFY_EMAIL_FIRST",
@@ -35,6 +34,7 @@ const post__sign_up = async (req, res, next) => {
     });
   } catch (e) {
     console.log(e);
+    return res.status(500);
   }
 };
 
