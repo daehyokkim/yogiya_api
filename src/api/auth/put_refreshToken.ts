@@ -27,7 +27,10 @@ const put__refreshToken = async (req: Request, res: Response) => {
         .json({ error: true, message: "토큰이 올바르지 않습니다." });
     }
 
-    const newAccessToken: string = generateAccessToken(decodedAccessToken.data);
+    const newAccessToken: string = generateAccessToken(
+      decodedAccessToken.data.email,
+      decodedAccessToken.data.id
+    );
     const decodedRefreshToken = verifyRefreshToken(refreshToken) as JwtPayload;
     if (!decodedRefreshToken || !decodedAccessToken.exp) {
       return res.status(500).json({
@@ -43,7 +46,8 @@ const put__refreshToken = async (req: Request, res: Response) => {
       dayjs(decodedRefreshToken.exp! * 1000).diff(dayjs(), "weeks") < 2
     ) {
       const newRefreshToken = generateRefreshToken(
-        decodedAccessToken.data.persist
+        decodedAccessToken.data.email,
+        decodedAccessToken.data.id
       );
 
       await prisma.userExtra.update({
