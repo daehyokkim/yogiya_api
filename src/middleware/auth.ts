@@ -1,4 +1,4 @@
-import { verifyAccessToken } from "src/utiles/jwt";
+import { verifyAccessToken } from "../utiles/jwt";
 import { Request, Response, NextFunction } from "express";
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {

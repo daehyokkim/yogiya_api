@@ -320,9 +320,9 @@
         }
       }
     },
-    "/v1/friends/": {
+    "/v1/friends/list": {
       "get": {
-        "summary": "친구 리스트 불러오기 API (미완)",
+        "summary": "친구 리스트 불러오기 API (테스팅)",
         "description": "  ** 친구리스트를 전송해주는 API 입니다. **",
         "parameters": [
           {
@@ -338,7 +338,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "friendInfo": {
+                "friendList": {
                   "type": "array",
                   "items": {
                     "type": "object",
@@ -346,6 +346,49 @@
                       "email": {
                         "type": "string",
                         "example": "친구이메일2"
+                      },
+                      "nickName": {
+                        "type": "string",
+                        "example": "닉네임"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/friends/request-list": {
+      "get": {
+        "summary": "친구요청대기 리스트 불러오기 API (테스팅)",
+        "description": "  ** 친구요청대기 리스트를 전송해주는 API 입니다. **",
+        "parameters": [
+          {
+            "name": "obj",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "친구요청대기 리스트를 반환합니다.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "requestList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "example": "친구 이메일"
                       }
                     }
                   }
@@ -358,53 +401,14 @@
           }
         }
       },
-      "post": {
-        "summary": "친구 신청 API (미완)",
-        "description": "  ** 친구 신청을 담당하는 API입니다 **<br/><br/>  1. 친구요청 방법은 링크,QR 코드로 초대 가능합니다.  ",
+      "put": {
+        "summary": "요청 대기중인 친구 수락/거절 API (미완) | socket통신으로 로직 예상즁..",
+        "description": "  ** 요청 대기중인 친구를 수락/거절을 결정하는 API입니다 **  ",
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "친구 신청 타입",
-            "required": true,
-            "schema": {
-              "type": "QR OR link"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "QR/link로 해당 친구를 찾아 정상적인지 아닌지를 반환한다.  1. 정상적인 유저\n  ```  {  error: false,  message : \"SUCCESS\"  }  ```/n/n  2. 존재하지 않는 유저\n  ```  {  error:true,  message :\"존재하지 않는 친구입니다.\"  }  ```  "
-          },
-          "400": {
-            "description": "잘못된 QR 또는 링크 전송시 에러 반한합니다.",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "잘못된 QR 또는 링크입니다. 확인 후 다시 시도바랍니다."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "친구 삭제 API (미완)",
-        "description": "  ** 친구리스트에서 친구 삭제를 담당하는 API입니다 **  ",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "친구 email",
+            "description": "친구 email, 수락(true)/거절(false)",
             "required": true,
             "schema": {
               "type": "object",
@@ -412,6 +416,10 @@
                 "friendEmail": {
                   "type": "string",
                   "example": "친구 email"
+                },
+                "isDecision": {
+                  "type": "boolean",
+                  "example": true
                 }
               }
             }
@@ -478,35 +486,37 @@
         }
       }
     },
-    "/v1/friends/requests-pending": {
-      "get": {
-        "summary": "친구요청대기 리스트 불러오기 API (미완)",
-        "description": "  ** 친구요청대기 리스트를 전송해주는 API 입니다. **",
+    "/v1/friends/request": {
+      "post": {
+        "summary": "친구 신청 API (테스팅)",
+        "description": "  ** 친구 신청을 담당하는 API입니다 **<br/><br/>  1. 친구요청 방법은 링크,QR 코드로 초대 가능합니다.  ",
         "parameters": [
           {
-            "name": "obj",
-            "required": false,
-            "in": "query",
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "description": "친구 신청 타입",
+            "required": true,
+            "schema": {
+              "type": "QR OR link"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "친구요청대기 리스트를 반환합니다.",
+            "description": "QR/link로 해당 친구를 찾아 정상적인지 아닌지를 반환한다.  1. 정상적인 유저\n  ```  {  error: false,  message : \"SUCCESS\"  }  ```/n/n  2. 존재하지 않는 유저\n  ```  {  error:true,  message :\"존재하지 않는 친구입니다.\"  }  ```  "
+          },
+          "400": {
+            "description": "잘못된 QR 또는 링크 전송시 에러 반한합니다.",
             "schema": {
               "type": "object",
               "properties": {
-                "requestList": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "email": {
-                        "type": "string",
-                        "example": "친구 이메일"
-                      }
-                    }
-                  }
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 QR 또는 링크입니다. 확인 후 다시 시도바랍니다."
                 }
               },
               "xml": {
@@ -515,15 +525,17 @@
             }
           }
         }
-      },
-      "put": {
-        "summary": "요청 대기중인 친구 수락/거절 API (미완)",
-        "description": "  ** 요청 대기중인 친구를 수락/거절을 결정하는 API입니다 **  ",
+      }
+    },
+    "/v1/friends/": {
+      "delete": {
+        "summary": "친구 삭제 API (미완) ㅣ socket 통신으로 로직 예상중",
+        "description": "  ** 친구리스트에서 친구 삭제를 담당하는 API입니다 **  ",
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "친구 email, 수락(true)/거절(false)",
+            "description": "친구 email",
             "required": true,
             "schema": {
               "type": "object",
@@ -531,10 +543,6 @@
                 "friendEmail": {
                   "type": "string",
                   "example": "친구 email"
-                },
-                "isDecision": {
-                  "type": "boolean",
-                  "example": true
                 }
               }
             }
