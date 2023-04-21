@@ -1,27 +1,41 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 //access token을 secret key 기반으로 생성
-export const generateAccessToken = (email: string) => {
-  return jwt.sign({ email }, process.env.ACCESS_TOKEN_SECRET as string, {
+export const generateAccessToken = (email: string, id: number) => {
+  return jwt.sign({ email, id }, process.env.ACCESS_TOKEN_SECRET as string, {
     expiresIn: "15m",
   });
 };
 
 //refresh token을 secret key 기반으로 생성
-export const generateRefreshToken = (email: string) => {
-  return jwt.sign({ email }, process.env.REFRESH_TOKEN_SECRET as string, {
+export const generateRefreshToken = (email: string, id: number) => {
+  return jwt.sign({ email, id }, process.env.REFRESH_TOKEN_SECRET as string, {
     expiresIn: "180 days",
   });
 };
 
 //access token verify checking
 export const verifyAccessToken = (token: string) => {
-  return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
+  try {
+    return jwt.verify(
+      token,
+      process.env.ACCESS_TOKEN_SECRET as string
+    ) as JwtPayload;
+  } catch (e) {
+    return false;
+  }
 };
 
 //refresh token verify checking
 export const verifyRefreshToken = (token: string) => {
-  return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET as string);
+  try {
+    return jwt.verify(
+      token,
+      process.env.REFRESH_TOKEN_SECRET as string
+    ) as JwtPayload;
+  } catch (e) {
+    return false;
+  }
 };
 
 // JWT토큰을 디코딩해 payload부븐을 추출하는 매소드 JWT구조는

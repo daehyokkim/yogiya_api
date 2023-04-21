@@ -54,12 +54,11 @@ model SpeedType {
 }
 
 model FriendInfo {
-  id     Int     @id @default(autoincrement())
-  userId Int     @unique
-  list   String? @db.LongText
-  User   User    @relation(fields: [userId], references: [id])
-
-  @@index([userId], map: "User_Fk")
+  id            Int    @id @default(autoincrement()) @db.UnsignedInt
+  userId        Int    @unique(map: "userId")
+  connectedList String @db.LongText
+  pendingList   String @db.LongText
+  User          User   @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "userId_fk")
 }
 
 model Setting {

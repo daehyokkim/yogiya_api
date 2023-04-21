@@ -1,13 +1,13 @@
 import Router from "express";
-
+import friendCtrl from "./friend.ctrl";
 const router = Router();
 
 router.get(
-  "/",
-  () => {}
+  "/list",
+  friendCtrl.get.friendList
 
   /*
-      #swagger.summary = "친구 리스트 불러오기 API (미완)"
+      #swagger.summary = "친구 리스트 불러오기 API (테스팅)"
       #swagger.description = '
       ** 친구리스트를 전송해주는 API 입니다. **'
       #swagger.parameters['obj']= {
@@ -17,7 +17,7 @@ router.get(
       #swagger.responses[200] = {
         description : '친구 리스트를 반환합니다.',
         schema:{
-            friendInfo : [{email:'친구 이메일' },{email:'친구이메일2'}]
+            friendList : [{email:'친구 이메일','nickName':"별명" },{email:'친구이메일2',"nickName":"닉네임"}]
         }
     
     }
@@ -26,10 +26,10 @@ router.get(
 );
 
 router.get(
-  "/requests-pending",
-  () => {}
+  "/request-list",
+  friendCtrl.get.requestList
   /*
-        #swagger.summary = "친구요청대기 리스트 불러오기 API (미완)"
+        #swagger.summary = "친구요청대기 리스트 불러오기 API (테스팅)"
         #swagger.description = '
         ** 친구요청대기 리스트를 전송해주는 API 입니다. **'
         #swagger.parameters['obj']= {
@@ -48,10 +48,10 @@ router.get(
 );
 
 router.post(
-  "/",
-  () => {}
+  "/request",
+  friendCtrl.post.request
   /*
-    #swagger.summary = "친구 신청 API (미완)"
+    #swagger.summary = "친구 신청 API (테스팅)"
     #swagger.description = '
     ** 친구 신청을 담당하는 API입니다 **<br/><br/>
     1. 친구요청 방법은 링크,QR 코드로 초대 가능합니다.
@@ -99,7 +99,7 @@ router.delete(
   "/",
   () => {}
   /*
-    #swagger.summary = "친구 삭제 API (미완)"
+    #swagger.summary = "친구 삭제 API (미완) ㅣ socket 통신으로 로직 예상중" 
     #swagger.description = '
     ** 친구리스트에서 친구 삭제를 담당하는 API입니다 **
     '
@@ -138,10 +138,10 @@ router.delete(
 );
 
 router.put(
-  "/requests-pending",
+  "/request-list",
   () => {}
   /*
-    #swagger.summary = "요청 대기중인 친구 수락/거절 API (미완)"
+    #swagger.summary = "요청 대기중인 친구 수락/거절 API (미완) | socket통신으로 로직 예상즁.."
     #swagger.description = '
     ** 요청 대기중인 친구를 수락/거절을 결정하는 API입니다 **
     '

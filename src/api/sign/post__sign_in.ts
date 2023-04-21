@@ -16,6 +16,7 @@ const post_sign_up = async (req: Request, res: Response) => {
       where: { email: email },
       select: {
         id: true,
+        email: true,
         password: true,
         nickname: true,
       },
@@ -36,8 +37,8 @@ const post_sign_up = async (req: Request, res: Response) => {
       });
     }
 
-    const accessToken = generateAccessToken(email);
-    const refreshToken = generateRefreshToken(email);
+    const accessToken = generateAccessToken(user.email, user.id);
+    const refreshToken = generateRefreshToken(user.email, user.id);
     const verifiedRefreshToken = verifyRefreshToken(refreshToken) as JwtPayload;
     console.log(verifiedRefreshToken);
     if (!verifiedRefreshToken || !verifiedRefreshToken.exp) {
