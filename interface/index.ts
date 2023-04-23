@@ -5,6 +5,8 @@ export interface CustomSocket extends Socket {
   room?: any;
   authorization: boolean;
   userId: number;
+  friends: any;
+  requestFriends: any;
 }
 
 export interface CustomSession extends SessionData {

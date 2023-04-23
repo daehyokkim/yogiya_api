@@ -106,7 +106,7 @@ const post__sendCode = async (req: Request, res: Response) => {
     </table>
   </div>
   `;
-    if (process.env.NODE_ENV !== "test") {
+    if (process.env.NODE_ENV === "main") {
       const mailOption = {
         from: process.env.MAIL_ID,
         to: email,
