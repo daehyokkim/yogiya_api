@@ -28,7 +28,6 @@ export default class SocketServer {
 
       if (process.env.NODE_ENV !== "test") {
         this.io.use((socket: CustomSocket, next: NextFunction) => {
-          console.log(socket.handshake);
           const token =
             socket.handshake.headers.authorization?.split("Bearer ")[1];
 
@@ -46,13 +45,11 @@ export default class SocketServer {
             console.log("잘못된 접근입니다.");
           }
           this.sockets[socket.id] = socket;
-          console.log(socket);
           next();
         });
       }
 
       this.io.on("connection", onClientConnected);
-
       this.server.listen(3000, () => {
         console.log("서버가 시작되었습니다.");
       });
