@@ -6,7 +6,7 @@ router.get(
   "/",
   () => {}
   /*
-        #swagger.summary = "내정보 반환 API (미완)"
+        #swagger.summary = "내정보 반환 API --> 내정보를 반환하는 API 필요할지.. 고민돼요.."
         #swagger.description = '
         ** 내정보를 반환하는 API 입니다. **'
         #swagger.parameters['obj']= {
@@ -42,92 +42,6 @@ router.get(
 );
 
 router.put(
-  "/profile",
-  () => {}
-  /*
-        #swagger.summary = "프로필 변경 API (미완)"
-        #swagger.description = '
-        ** 내 프로필 정보를 변경하는 API 입니다. **'
-        #swagger.parameters['obj']= {
-            in : 'form-data',
-            name : 'form-data',
-            discription: '변경할 프로필 데이터 전송',
-            required : true,
-            schema:{
-                newProfile : 'data..'
-            }
-        }
-        
-        #swagger.responses[200] = {
-            description : '정상적으로 프로필 변경 완료',
-            schema:{
-                error : false,
-                message : 'SUCCESS'
-            }
-        } 
-
-        #swagger.responses[400] = {
-            description : '잘못된 데이터 전송 또는 접근으로 인한 오류 반환',
-            schema:{
-                error: true,
-                message : "잘못된 접근입니다."
-            }
-        }
-        #swagger.responses[500] = {
-            description : '서버 내부의 문제 발생',
-            schema:{
-                error : true,
-                message : "알수없은 문제 발생. 잠시후 다시 실행해주세요."
-            }
-        }
-  
-  */
-);
-
-router.put(
-  "/nickname",
-  () => {}
-  /*
-          #swagger.summary = "닉네임 변경 API (미완)"
-          #swagger.description = '
-          ** 내 닉네임 정보를 변경하는 API 입니다. **'
-          #swagger.parameters['obj']= {
-              in : 'form-data',
-              name : 'form-data',
-              discription: '변경할 닉네임 데이터 전송',
-              required : true,
-              schema:{
-                  newNickname : '철수'
-              }
-          }
-          
-          #swagger.responses[200] = {
-              description : '정상적으로 닉네임 변경 완료',
-              schema:{
-                  error : false,
-                  message : 'SUCCESS'
-              }
-          } 
-  
-          #swagger.responses[400] = {
-              description : '잘못된 데이터 전송 또는 접근으로 인한 오류 반환',
-              schema:{
-                  error: true,
-                  message : "잘못된 접근입니다."
-              }
-          }
-          #swagger.responses[500] = {
-              description : '서버 내부의 문제 발생',
-              schema:{
-                  error : true,
-                  message : "알수없은 문제 발생. 잠시후 다시 실행해주세요."
-              }
-          }
-    
-    */
-);
-
-router.put(
   "/password",
   () => {}
   /*
@@ -135,12 +49,12 @@ router.put(
             #swagger.description = '
             ** 내 비밀번호 정보를 변경하는 API 입니다. **'
             #swagger.parameters['obj']= {
-                in : 'form-data',
-                name : 'form-data',
+                in : 'body',
+                name : 'body',
                 discription: '변경할 비밀번호 데이터 전송',
                 required : true,
                 schema:{
-                    newNickname : '철수'
+                    password : '변경할 비밀번호'
                 }
             }
             
@@ -170,6 +84,38 @@ router.put(
       */
 );
 
+router.get(
+  "/log-out",
+  () => {}
+  /*
+                #swagger.summary = "로그아웃 API (미완)"
+                #swagger.description = '
+                ** 로그아웃 api ** <br/>
+                로그아웃시 강제로 socket connection이 끊김'
+                #swagger.responses[200] = {
+                    schema:{
+                        error : false,
+                        message : 'SUCCESS'
+                    }
+                } 
+        
+                #swagger.responses[400] = {
+                    description : '잘못된 데이터 전송 또는 접근으로 인한 오류 반환',
+                    schema:{
+                        error: true,
+                        message : "잘못된 접근입니다."
+                    }
+                }
+                #swagger.responses[500] = {
+                    description : '서버 내부의 문제 발생',
+                    schema:{
+                        error : true,
+                        message : "알수없은 문제 발생. 잠시후 다시 실행해주세요."
+                    }
+                }
+          
+          */
+);
 router.delete(
   "/",
   () => {}

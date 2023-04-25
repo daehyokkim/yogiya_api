@@ -56,7 +56,7 @@ const onClientConnected = (_socket: CustomSocket) => {
         console.log(socketServer.io.sockets.adapter.rooms);
 
         //return data
-        //친구 정보 및 디바이스 데이터를 리턴 시켜줘야 됄듯..??
+        //친구 정보 및 디바이스 데이터를 리턴 시켜줘야 듯..??
       }
     });
 
@@ -127,6 +127,9 @@ const onClientConnected = (_socket: CustomSocket) => {
             connectedList: JSON.stringify(tempMyFriend),
           },
         });
+
+        //수락한 친구에게 push알림 전송 해야됨
+
         console.log(`방 입장: ${data.email}`);
         if (socketServer.sockets[data.email]) {
           _socket.join(data.email);

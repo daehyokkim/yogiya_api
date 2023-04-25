@@ -29,7 +29,7 @@ router.post(
         description : '회원가입 성공!',
         schema:{
             error:false,
-            message:"SUCCESS_SIGN_UP"
+            message:"SUCCESS_SIGN_UP",
         }
     }
 
@@ -67,15 +67,18 @@ router.post(
         description : '**서버와 통신은 정상이지만 오류가 발생할 수있습니다.**
         1. 존재하지 않는 유저일 경우\n
         ```
-            error: true,
-            message: "not found user info. pleas dublechecking.."
+        {
+            "error": true,
+            "message": "not found user info. pleas dublechecking.."
+        }
         ```\n\n
 
         2.아이디 또는 비밀번호가 올바르지 않은 경우\n
-        ``` 
-            error: true,
-            message: "비밀번호 또는 이메일이 올바르지 않습니다.",
-
+        ```
+            {    
+            "error": true,
+            "message": "비밀번호 또는 이메일이 올바르지 않습니다.",
+            }
         ```\n\n
         ',
         schema:{

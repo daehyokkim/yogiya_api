@@ -8,7 +8,8 @@
   "host": "localhost:3000",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http",
+    "socket"
   ],
   "paths": {
     "/v1/sign/up": {
@@ -113,7 +114,7 @@
         ],
         "responses": {
           "200": {
-            "description": "**서버와 통신은 정상이지만 오류가 발생할 수있습니다.**  1. 존재하지 않는 유저일 경우\n  ```  error: true,  message: \"not found user info. pleas dublechecking..\"  ```\n\n   2.아이디 또는 비밀번호가 올바르지 않은 경우\n  ```   error: true,  message: \"비밀번호 또는 이메일이 올바르지 않습니다.\",   ```\n\n  ",
+            "description": "**서버와 통신은 정상이지만 오류가 발생할 수있습니다.**  1. 존재하지 않는 유저일 경우\n  ```  {  \"error\": true,  \"message\": \"not found user info. pleas dublechecking..\"  }  ```\n\n   2.아이디 또는 비밀번호가 올바르지 않은 경우\n  ```  {   \"error\": true,  \"message\": \"비밀번호 또는 이메일이 올바르지 않습니다.\",  }  ```\n\n  ",
             "schema": {
               "type": "object",
               "properties": {
@@ -324,14 +325,7 @@
       "get": {
         "summary": "친구 리스트 불러오기 API (테스팅)",
         "description": "  ** 친구리스트를 전송해주는 API 입니다. **",
-        "parameters": [
-          {
-            "name": "obj",
-            "required": false,
-            "in": "query",
-            "type": "string"
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "친구 리스트를 반환합니다.",
@@ -350,6 +344,10 @@
                       "nickName": {
                         "type": "string",
                         "example": "닉네임"
+                      },
+                      "profile": {
+                        "type": "string",
+                        "example": "URL"
                       }
                     }
                   }
@@ -367,14 +365,7 @@
       "get": {
         "summary": "친구요청대기 리스트 불러오기 API (테스팅)",
         "description": "  ** 친구요청대기 리스트를 전송해주는 API 입니다. **",
-        "parameters": [
-          {
-            "name": "obj",
-            "required": false,
-            "in": "query",
-            "type": "string"
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "친구요청대기 리스트를 반환합니다.",
@@ -388,94 +379,18 @@
                     "properties": {
                       "email": {
                         "type": "string",
-                        "example": "친구 이메일"
+                        "example": "친구이메일2"
+                      },
+                      "nickName": {
+                        "type": "string",
+                        "example": "닉네임"
+                      },
+                      "profile": {
+                        "type": "string",
+                        "example": "URL"
                       }
                     }
                   }
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "요청 대기중인 친구 수락/거절 API (미완) | socket통신으로 로직 예상즁..",
-        "description": "  ** 요청 대기중인 친구를 수락/거절을 결정하는 API입니다 **  ",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "친구 email, 수락(true)/거절(false)",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "friendEmail": {
-                  "type": "string",
-                  "example": "친구 email"
-                },
-                "isDecision": {
-                  "type": "boolean",
-                  "example": true
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "친구 삭제 완료",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "SUCCESS"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "400": {
-            "description": "잘못된 접근",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "잘못된 접근입니다."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "서버 내부 문제",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "잘못된 접근입니다."
                 }
               },
               "xml": {
@@ -497,7 +412,13 @@
             "description": "친구 신청 타입",
             "required": true,
             "schema": {
-              "type": "QR OR link"
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "유저 이메일"
+                }
+              }
             }
           }
         ],
@@ -527,91 +448,9 @@
         }
       }
     },
-    "/v1/friends/": {
-      "delete": {
-        "summary": "친구 삭제 API (미완) ㅣ socket 통신으로 로직 예상중",
-        "description": "  ** 친구리스트에서 친구 삭제를 담당하는 API입니다 **  ",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "친구 email",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "friendEmail": {
-                  "type": "string",
-                  "example": "친구 email"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "친구 삭제 완료",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "SUCCESS"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "400": {
-            "description": "잘못된 접근",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "잘못된 접근입니다."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "서버 내부 문제",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "잘못된 접근입니다."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/my-page/": {
       "get": {
-        "summary": "내정보 반환 API (미완)",
+        "summary": "내정보 반환 API --> 내정보를 반환하는 API 필요할지.. 고민돼요..",
         "description": "  ** 내정보를 반환하는 API 입니다. **",
         "parameters": [
           {
@@ -766,7 +605,366 @@
         }
       }
     },
-    "/v1/my-page/profile": {
+    "/v1/my-page/password": {
+      "put": {
+        "summary": "비밀번호 변경 API (미완)",
+        "description": "  ** 내 비밀번호 정보를 변경하는 API 입니다. **",
+        "parameters": [
+          {
+            "name": "form-data",
+            "in": "form-data",
+            "discription": "변경할 비밀번호 데이터 전송",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "newNickname": {
+                  "type": "string",
+                  "example": "철수"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "정상적으로 비밀번호 변경 완료",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "SUCCESS"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 데이터 전송 또는 접근으로 인한 오류 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 접근입니다."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "서버 내부의 문제 발생",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "알수없은 문제 발생. 잠시후 다시 실행해주세요."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/my-page/log-out": {
+      "get": {
+        "summary": "로그아웃 API (미완)",
+        "description": "  ** 로그아웃 api ** <br/>  로그아웃시 강제로 socket connection이 끊김",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "SUCCESS"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "잘못된 데이터 전송 또는 접근으로 인한 오류 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 접근입니다."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "서버 내부의 문제 발생",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "알수없은 문제 발생. 잠시후 다시 실행해주세요."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/socket/login": {
+      "get": {
+        "summary": "로그인 socket 통신",
+        "description": "**socket connection 연결 및 친구리스트를 리턴 받습니다** <br/> flutter endpoint는 미정입니다.  ",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "정상적으로 connection 연결시.. 단,fornt에서 endPoint 가 정해지면 가능함",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "friendList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "nickName": {
+                            "type": "string",
+                            "example": "철수"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "이메일"
+                          },
+                          "profile": {
+                            "type": "string",
+                            "example": "URL"
+                          },
+                          "latitude": {
+                            "type": "string",
+                            "example": "위도"
+                          },
+                          "longitude": {
+                            "type": "string",
+                            "example": "경도"
+                          },
+                          "battery": {
+                            "type": "string",
+                            "example": "베터리"
+                          },
+                          "speed": {
+                            "type": "string",
+                            "example": "속도"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/socket/deleteFriend": {
+      "delete": {
+        "summary": "친구 삭제 기능",
+        "description": "  ** 친구리스트에서 친구 삭제를 담당하는 API입니다 ** <br/>  친구 삭제시 내룸,친구룸 모두 퇴장됩니다.  ",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "친구 email",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "친구 email"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "친구 삭제 완료",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "SUCCESS"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/socket/setRequest": {
+      "post": {
+        "summary": "요청 대기중인 친구 수락/거절 API",
+        "description": "  ** 요청 대기중인 친구를 수락/거절을 결정하는 API입니다 ** <br/>  친구 수락시 나에게 친구 정보를 보내는 endPoint 필요합니다.(미완)  ",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "친구 email, 수락(true)/거절(false)",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "친구 email"
+                },
+                "answer": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "  친구 수락시\n  ```  data:{  nickName : '철수',  email : '이메일',  profile : 'URL',  latitude : '위도',  longitude : '경도',  battery : '베터리',  speed : '속도',  }  ```\n\n  거절시\n  ```  data:{  ....음 이부분은 어떻게 보내주는게 편한지 회의해보기  }  ```  "
+          }
+        }
+      }
+    },
+    "/socket/sendLocation": {
+      "put": {
+        "summary": "내위치 전송 통신",
+        "description": "**내 정보를 전송하고, 내 룸에 있는 친구들에게 브로드케스트 통신을 전송합니다.**  ",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "discription": "변경할 비밀번호 데이터 전송",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "latitude": {
+                      "type": "string",
+                      "example": "위도"
+                    },
+                    "longitude": {
+                      "type": "string",
+                      "example": "경도"
+                    },
+                    "battery": {
+                      "type": "string",
+                      "example": "베터리"
+                    },
+                    "speed": {
+                      "type": "string",
+                      "example": "속도"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " fornt에서 endPoint 가 정해지면 가능함",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "latitude": {
+                      "type": "string",
+                      "example": "위도"
+                    },
+                    "longitude": {
+                      "type": "string",
+                      "example": "경도"
+                    },
+                    "battery": {
+                      "type": "string",
+                      "example": "베터리"
+                    },
+                    "speed": {
+                      "type": "string",
+                      "example": "속도"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/socket/updateProfile": {
       "put": {
         "summary": "프로필 변경 API (미완)",
         "description": "  ** 내 프로필 정보를 변경하는 API 입니다. **",
@@ -848,7 +1046,7 @@
         }
       }
     },
-    "/v1/my-page/nickname": {
+    "/socket/updatNickname": {
       "put": {
         "summary": "닉네임 변경 API (미완)",
         "description": "  ** 내 닉네임 정보를 변경하는 API 입니다. **",
@@ -872,88 +1070,6 @@
         "responses": {
           "200": {
             "description": "정상적으로 닉네임 변경 완료",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "SUCCESS"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "400": {
-            "description": "잘못된 데이터 전송 또는 접근으로 인한 오류 반환",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "잘못된 접근입니다."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "서버 내부의 문제 발생",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "알수없은 문제 발생. 잠시후 다시 실행해주세요."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/my-page/password": {
-      "put": {
-        "summary": "비밀번호 변경 API (미완)",
-        "description": "  ** 내 비밀번호 정보를 변경하는 API 입니다. **",
-        "parameters": [
-          {
-            "name": "form-data",
-            "in": "form-data",
-            "discription": "변경할 비밀번호 데이터 전송",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "newNickname": {
-                  "type": "string",
-                  "example": "철수"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "정상적으로 비밀번호 변경 완료",
             "schema": {
               "type": "object",
               "properties": {
