@@ -19,3 +19,5 @@
 ## 부가정보
 
 - 로컬로 API 테스트를 수행할 시 http://localost:3000/doc 로 들어가면 API 명새서가 기로되어 있습니다.
+- open server URL http://ec2-13-113-183-40.ap-northeast-1.compute.amazonaws.com:3000 으로 접속하면 api,socket 통시 사용 가능
+- http:/ec2-13-113-183-40.ap-northeast-1.compute.amazonaws.com:3000/doc 으로 api document 볼 수 있음
