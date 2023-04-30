@@ -448,6 +448,13 @@
         }
       }
     },
+    "/v1/my-page/profile": {
+      "put": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/v1/my-page/": {
       "get": {
         "summary": "내정보 반환 API --> 내정보를 반환하는 API 필요할지.. 고민돼요..",
@@ -611,16 +618,16 @@
         "description": "  ** 내 비밀번호 정보를 변경하는 API 입니다. **",
         "parameters": [
           {
-            "name": "form-data",
-            "in": "form-data",
+            "name": "body",
+            "in": "body",
             "discription": "변경할 비밀번호 데이터 전송",
             "required": true,
             "schema": {
               "type": "object",
               "properties": {
-                "newNickname": {
+                "password": {
                   "type": "string",
-                  "example": "철수"
+                  "example": "변경할 비밀번호"
                 }
               }
             }

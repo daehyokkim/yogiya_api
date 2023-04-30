@@ -45,7 +45,10 @@ const post__verifyCode = async (req: Request, res: Response) => {
     }
   } catch (e) {
     console.log(e);
-    return res.status(500);
+    return res.status(500).json({
+      error: true,
+      message: "SERVER ERROR",
+    });
   }
 };
 

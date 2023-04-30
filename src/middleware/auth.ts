@@ -21,7 +21,10 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     }
   } catch (e) {
     console.log(e);
-    res.status(500);
+    res.status(500).json({
+      error: true,
+      message: "SERVER ERROR",
+    });
   }
 };
 

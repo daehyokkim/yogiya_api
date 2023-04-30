@@ -152,7 +152,10 @@ const post__sendCode = async (req: Request, res: Response) => {
     });
   } catch (e) {
     console.log(e);
-    return res.status(500);
+    return res.status(500).json({
+      error: true,
+      message: "SERVER ERROR",
+    });
   }
 };
 export default post__sendCode;

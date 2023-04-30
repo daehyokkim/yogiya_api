@@ -20,7 +20,10 @@ const delete__sign_out = async (req: Request, res: Response) => {
     return res.status(200).json({ ok: true });
   } catch (e) {
     console.log(e);
-    return res.status(500);
+    return res.status(500).json({
+      error: true,
+      message: "SERVER ERROR",
+    });
   }
 };
 
