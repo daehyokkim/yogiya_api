@@ -197,27 +197,23 @@ const onClientConnected = (_socket: CustomSocket) => {
       }
     });
 
-    if (process.env.NODE_ENV !== "main") {
-      _socket.on("room", () => {
-        const io = SocketServer.instance.io;
-        console.log(io.sockets.adapter.rooms);
-      });
-      _socket.on("roomInfo", (data) => {
-        let io = SocketServer.instance.io;
-        console.log(io.sockets.adapter.rooms.get(data.email));
-      });
-    }
     // 클라이언트와의 연결이 끊어졌을 때 핸들러
-    _socket.on("disconnect", () => {
+    _socket.on("logOut", async () => {
       const io = SocketServer.instance.io;
       if (!_socket.userEmail) {
         console.log("not socket UserEmail");
       } else {
+        await prisma.userExtra.update({
+          where: {
+            userId: _socket.userId,
+          },
+          data: {
+            refreshToken: null,
+          },
+        });
         delete io.sockets.adapter.rooms[_socket.userEmail];
         delete socketServer.sockets[_socket.userEmail];
-        console.log("클라이언트 연결이 끊어졌음");
-        console.log(socketServer.sockets);
-        console.log(io.sockets.adapter.rooms);
+        _socket.disconnect();
       }
     });
   } catch (e) {
