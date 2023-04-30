@@ -6,6 +6,12 @@ const post__request = async (req: Request, res: Response) => {
     const { email } = req.body;
     //emil 혹은 QR | Link인데 회를 해야될듯 일단 이메일로 임이로 둔다.
     const user = req.decodedUser;
+    if (!email) {
+      return res.status(400).json({
+        error: true,
+        message: "INVALID PARAMS",
+      });
+    }
 
     const rsFriendInfo = await prisma.user.findUnique({
       where: {

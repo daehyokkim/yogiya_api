@@ -12,6 +12,14 @@ import { Request, Response } from "express";
 const put__refreshToken = async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(400).json({
+        error: true,
+        message: "INVALID PARAMS",
+      });
+    }
+
     const accessToken = req.headers.authorization?.split("Bearer ")[1];
 
     if (!accessToken) {

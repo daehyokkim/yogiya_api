@@ -3,6 +3,14 @@ import { Request, Response } from "express";
 import { CustomSession } from "../../../interface";
 const post__verifyCode = async (req: Request, res: Response) => {
   const { verifyCode } = req.body;
+
+  if (!verifyCode) {
+    return res.status(400).json({
+      error: true,
+      message: "INVALID PARAMS",
+    });
+  }
+
   let session: CustomSession = req.session;
   try {
     if (!session.verifyEmail?.otp) {

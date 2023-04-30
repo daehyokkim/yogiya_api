@@ -6,6 +6,13 @@ const post__sendCode = async (req: Request, res: Response) => {
   const { type = "resetPassword" } = req.query;
   const { email } = req.body;
   try {
+    if (!email) {
+      return res.status(400).json({
+        error: true,
+        message: "INVALID PARAMS",
+      });
+    }
+
     if (type === "sign_up") {
       //이미 회원가입을 한 유저인지 확인
     }

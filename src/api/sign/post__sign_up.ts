@@ -8,6 +8,13 @@ const post__sign_up = async (req: Request, res: Response) => {
 
   let session: CustomSession = req.session;
   try {
+    if (!email || !password || !nickname) {
+      return res.status(400).json({
+        error: true,
+        message: "INVALID PARAMS",
+      });
+    }
+
     //오류처리
     if (session.verifyEmail.email !== email || !session.verifyEmail.verified) {
       return res.status(400).json({

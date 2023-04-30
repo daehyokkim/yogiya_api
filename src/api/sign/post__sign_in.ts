@@ -12,6 +12,13 @@ const post_sign_up = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   console.log(email);
   try {
+    if (!email || !password) {
+      return res.status(400).json({
+        error: true,
+        message: "INVALID PARAMS",
+      });
+    }
+
     const user = await prisma.user.findUnique({
       where: { email: email },
       select: {
