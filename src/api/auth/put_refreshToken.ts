@@ -12,6 +12,14 @@ import { Request, Response } from "express";
 const put__refreshToken = async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(400).json({
+        error: true,
+        message: "INVALID PARAMS",
+      });
+    }
+
     const accessToken = req.headers.authorization?.split("Bearer ")[1];
 
     if (!accessToken) {
@@ -26,10 +34,9 @@ const put__refreshToken = async (req: Request, res: Response) => {
         .status(400)
         .json({ error: true, message: "토큰이 올바르지 않습니다." });
     }
-
     const newAccessToken: string = generateAccessToken(
-      decodedAccessToken.data.email,
-      decodedAccessToken.data.id
+      decodedAccessToken.email,
+      decodedAccessToken.id
     );
     const decodedRefreshToken = verifyRefreshToken(refreshToken) as JwtPayload;
     if (!decodedRefreshToken || !decodedAccessToken.exp) {
@@ -46,8 +53,8 @@ const put__refreshToken = async (req: Request, res: Response) => {
       dayjs(decodedRefreshToken.exp! * 1000).diff(dayjs(), "weeks") < 2
     ) {
       const newRefreshToken = generateRefreshToken(
-        decodedAccessToken.data.email,
-        decodedAccessToken.data.id
+        decodedAccessToken.email,
+        decodedAccessToken.id
       );
 
       await prisma.userExtra.update({
@@ -76,7 +83,10 @@ const put__refreshToken = async (req: Request, res: Response) => {
     });
   } catch (e) {
     console.log(e);
-    return res.status(500);
+    return res.status(500).json({
+      error: true,
+      message: "SERVER ERROR",
+    });
   }
 };
 

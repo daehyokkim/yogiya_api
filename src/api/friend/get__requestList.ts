@@ -26,11 +26,17 @@ const get__requestList = async (req: Request, res: Response) => {
         },
       });
     } else {
-      return res.status(400);
+      return res.status(400).json({
+        error: true,
+        message: "ERROR",
+      });
     }
   } catch (e) {
     console.log(e);
-    return res.status(500);
+    return res.status(500).json({
+      error: true,
+      message: "SERVER ERROR",
+    });
   }
 };
 
