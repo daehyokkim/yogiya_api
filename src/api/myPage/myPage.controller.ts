@@ -1,6 +1,9 @@
 import Router from "express";
+import multer from "multer";
+import myPageCtrl from "./myPage.ctrl";
 
 const router = Router();
+const upload = multer();
 
 router.get(
   "/",
@@ -39,49 +42,6 @@ router.get(
             }
         }
   */
-);
-
-router.put(
-  "/password",
-  () => {}
-  /*
-            #swagger.summary =  비밀번호 변경 API (미완)"
-            #swagger.description = '
-            ** 내 비밀번호 정보를 변경하는 API 입니다. **'
-            #swagger.parameters['obj']= {
-                in : 'body',
-                name : 'body',
-                discription: '변경할 비밀번호 데이터 전송',
-                required : true,
-                schema:{
-                    password : '변경할 비밀번호'
-                }
-            }
-            
-            #swagger.responses[200] = {
-                description : '정상적으로 비밀번호 변경 완료',
-                schema:{
-                    error : false,
-                    message : 'SUCCESS'
-                }
-            } 
-    
-            #swagger.responses[400] = {
-                description : '잘못된 데이터 전송 또는 접근으로 인한 오류 반환',
-                schema:{
-                    error: true,
-                    message : "잘못된 접근입니다."
-                }
-            }
-            #swagger.responses[500] = {
-                description : '서버 내부의 문제 발생',
-                schema:{
-                    error : true,
-                    message : "알수없은 문제 발생. 잠시후 다시 실행해주세요."
-                }
-            }
-      
-      */
 );
 
 router.get(
@@ -150,4 +110,135 @@ router.delete(
           }
     */
 );
+
+router.put(
+  "/password",
+  () => {}
+  /*
+              #swagger.summary =  비밀번호 변경 API (미완)"
+              #swagger.description = '
+              ** 내 비밀번호 정보를 변경하는 API 입니다. **'
+              #swagger.parameters['obj']= {
+                  in : 'body',
+                  name : 'body',
+                  discription: '변경할 비밀번호 데이터 전송',
+                  required : true,
+                  schema:{
+                      password : '변경할 비밀번호'
+                  }
+              }
+              
+              #swagger.responses[200] = {
+                  description : '정상적으로 비밀번호 변경 완료',
+                  schema:{
+                      error : false,
+                      message : 'SUCCESS'
+                  }
+              } 
+      
+              #swagger.responses[400] = {
+                  description : '잘못된 데이터 전송 또는 접근으로 인한 오류 반환',
+                  schema:{
+                      error: true,
+                      message : "잘못된 접근입니다."
+                  }
+              }
+              #swagger.responses[500] = {
+                  description : '서버 내부의 문제 발생',
+                  schema:{
+                      error : true,
+                      message : "알수없은 문제 발생. 잠시후 다시 실행해주세요."
+                  }
+              }
+        
+        */
+);
+
+router.put(
+  "/profile",
+  upload.single("image"),
+  myPageCtrl.put.profile
+  /*
+            #swagger.summary = "프로필 변경 API"
+            #swagger.description = '
+            ** 내 프로필 정보를 변경하는 API 입니다. **'
+            #swagger.parameters['obj']= {
+                in : 'formData',
+                name : 'fieldName : image',
+                description: '변경할 프로필 데이터 전송',
+                required : true,
+                schema:{
+                    image : 'file 데이터 전송'
+                }
+            }
+        
+            #swagger.responses[200] = {
+                description : '정상적으로 프로필 변경 완료',
+                schema:{
+                    error : false,
+                    updatedProfileUrl : 'newProfileUrl'
+                }
+            } 
+    
+            #swagger.responses[400] = {
+                description : '잘못된 데이터 전송 또는 접근으로 인한 오류 반환,socket 문제 발생시 전송 가능',
+                schema:{
+                    error: true,
+                    message : "잘못된 접근입니다."
+                }
+            }
+            #swagger.responses[500] = {
+                description : '서버 내부의 문제 발생',
+                schema:{
+                    error : true,
+                    message : "알수없은 문제 발생. 잠시후 다시 실행해주세요."
+                }
+            }
+      
+      */
+);
+
+router.put(
+  "/nick-name",
+  myPageCtrl.put.nickName
+  /*
+              #swagger.summary = "닉네임 변경 API"
+              #swagger.description = '
+              ** 내 닉네임 정보를 변경하는 API 입니다. **'
+              #swagger.parameters['obj']= {
+                  in : 'body',
+                  name : 'body',
+                  description: '변경할 닉네임 데이터 전송',
+                  required : true,
+                  schema:{
+                      newNickName : '철수'
+                  }
+              }
+              
+              #swagger.responses[200] = {
+                  description : '정상적으로 닉네임 변경 완료',
+                  schema:{
+                      error : false,
+                      message : 'SUCCESS'
+                  }
+              } 
+      
+              #swagger.responses[400] = {
+                  description : '잘못된 데이터 전송 또는 접근으로 인한 오류 반환',
+                  schema:{
+                      error: true,
+                      message : "잘못된 접근입니다."
+                  }
+              }
+              #swagger.responses[500] = {
+                  description : '서버 내부의 문제 발생',
+                  schema:{
+                      error : true,
+                      message : "알수없은 문제 발생. 잠시후 다시 실행해주세요."
+                  }
+              }
+        
+        */
+);
+
 export default router;
