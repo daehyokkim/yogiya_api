@@ -44,43 +44,11 @@ router.get(
   */
 );
 
-router.get(
-  "/log-out",
-  () => {}
-  /*
-                #swagger.summary = "로그아웃 API (미완)"
-                #swagger.description = '
-                ** 로그아웃 api ** <br/>
-                로그아웃시 강제로 socket connection이 끊김'
-                #swagger.responses[200] = {
-                    schema:{
-                        error : false,
-                        message : 'SUCCESS'
-                    }
-                } 
-        
-                #swagger.responses[400] = {
-                    description : '잘못된 데이터 전송 또는 접근으로 인한 오류 반환',
-                    schema:{
-                        error: true,
-                        message : "잘못된 접근입니다."
-                    }
-                }
-                #swagger.responses[500] = {
-                    description : '서버 내부의 문제 발생',
-                    schema:{
-                        error : true,
-                        message : "알수없은 문제 발생. 잠시후 다시 실행해주세요."
-                    }
-                }
-          
-          */
-);
 router.delete(
   "/",
   () => {}
   /*
-          #swagger.summary = "회원 탈퇴 API (미완)"
+          #swagger.summary = "회원 탈퇴 API (테스트)"
           #swagger.description = '
           ** 회원탈퇴 API 입니다. **'
           #swagger.parameters['obj']= {
@@ -115,7 +83,7 @@ router.put(
   "/password",
   () => {}
   /*
-              #swagger.summary =  비밀번호 변경 API (미완)"
+              #swagger.summary =  비밀번호 변경 API"
               #swagger.description = '
               ** 내 비밀번호 정보를 변경하는 API 입니다. **'
               #swagger.parameters['obj']= {
@@ -124,7 +92,7 @@ router.put(
                   discription: '변경할 비밀번호 데이터 전송',
                   required : true,
                   schema:{
-                      password : '변경할 비밀번호'
+                      newPasswrod : '변경할 비밀번호'
                   }
               }
               

@@ -29,6 +29,17 @@ const post__sendCode = async (req: Request, res: Response) => {
           message: "A user who exists.",
         });
       }
+    } else if (type === "change_password") {
+      const rsUser = await prisma.user.findUnique({
+        where: { email: email },
+      });
+
+      if (!rsUser) {
+        return res.status(200).json({
+          error: true,
+          message: "Not User id",
+        });
+      }
     }
 
     const transporter = nodemailer.createTransport({
