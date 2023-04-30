@@ -8,6 +8,9 @@ router.post(
   #swagger.summary = "이메일인 인증 코드 전송 API"
   #swagger.description = '
   ** 유저에게 이메일 인증 코드를 전송하는 api입니다. ** <br/><br/>
+  Params에 type을 전송해야됩니다.<br/>
+  1.type = sign_up 일때 -> 회원가입 할떄 사용<br/>
+  2.type = update_password 일때 -> 비밀번호 변경시 인증코드 전송<br/>
   '
   #swagger.parameters['obj'] = {
       in : 'body',

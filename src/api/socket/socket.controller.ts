@@ -33,6 +33,38 @@ router.get(
 */
 );
 
+router.get(
+  "/log-out",
+  () => {}
+  /*
+                  #swagger.summary = "로그아웃 API"
+                  #swagger.description = '
+                  ** 로그아웃 api ** <br/>
+                  로그아웃시 강제로 socket connection이 끊김'
+                  #swagger.responses[200] = {
+                      schema:{
+                          error : false,
+                          message : 'SUCCESS'
+                      }
+                  } 
+          
+                  #swagger.responses[400] = {
+                      description : '잘못된 데이터 전송 또는 접근으로 인한 오류 반환',
+                      schema:{
+                          error: true,
+                          message : "잘못된 접근입니다."
+                      }
+                  }
+                  #swagger.responses[500] = {
+                      description : '서버 내부의 문제 발생',
+                      schema:{
+                          error : true,
+                          message : "알수없은 문제 발생. 잠시후 다시 실행해주세요."
+                      }
+                  }
+            
+            */
+);
 router.delete(
   "/deleteFriend",
   () => {}

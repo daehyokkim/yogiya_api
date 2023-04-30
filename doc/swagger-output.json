@@ -7,7 +7,10 @@
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "schemes": ["http", "socket"],
+  "schemes": [
+    "http",
+    "socket"
+  ],
   "paths": {
     "/v1/sign/up": {
       "post": {
@@ -218,7 +221,7 @@
     "/v1/auth/send-code": {
       "post": {
         "summary": "이메일인 인증 코드 전송 API",
-        "description": "  ** 유저에게 이메일 인증 코드를 전송하는 api입니다. ** <br/><br/>  ",
+        "description": "  ** 유저에게 이메일 인증 코드를 전송하는 api입니다. ** <br/><br/>  Params에 type을 전송해야됩니다.<br/>  1.type = sign_up 일때 -> 회원가입 할떄 사용<br/>  2.type = update_password 일때 -> 비밀번호 변경시 인증코드 전송<br/>  ",
         "parameters": [
           {
             "name": "body",
@@ -531,7 +534,7 @@
         }
       },
       "delete": {
-        "summary": "회원 탈퇴 API (미완)",
+        "summary": "회원 탈퇴 API (테스트)",
         "description": "  ** 회원탈퇴 API 입니다. **",
         "parameters": [
           {
@@ -602,75 +605,9 @@
         }
       }
     },
-    "/v1/my-page/log-out": {
-      "get": {
-        "summary": "로그아웃 API (미완)",
-        "description": "  ** 로그아웃 api ** <br/>  로그아웃시 강제로 socket connection이 끊김",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "SUCCESS"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            },
-            "description": "OK"
-          },
-          "400": {
-            "description": "잘못된 데이터 전송 또는 접근으로 인한 오류 반환",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "잘못된 접근입니다."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "서버 내부의 문제 발생",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "알수없은 문제 발생. 잠시후 다시 실행해주세요."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/my-page/password": {
       "put": {
-        "summary": "비밀번호 변경 API (미완)",
+        "summary": "비밀번호 변경 API",
         "description": "  ** 내 비밀번호 정보를 변경하는 API 입니다. **",
         "parameters": [
           {
@@ -681,7 +618,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "password": {
+                "newPasswrod": {
                   "type": "string",
                   "example": "변경할 비밀번호"
                 }
@@ -965,6 +902,72 @@
                       }
                     }
                   }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/socket/log-out": {
+      "get": {
+        "summary": "로그아웃 API",
+        "description": "  ** 로그아웃 api ** <br/>  로그아웃시 강제로 socket connection이 끊김",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "SUCCESS"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "잘못된 데이터 전송 또는 접근으로 인한 오류 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 접근입니다."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "서버 내부의 문제 발생",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "알수없은 문제 발생. 잠시후 다시 실행해주세요."
                 }
               },
               "xml": {
