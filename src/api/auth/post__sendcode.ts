@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import { Request, Response } from "express";
 import { CustomSession } from "../../../interface";
+import prisma from "../../prisma";
 const post__sendCode = async (req: Request, res: Response) => {
   const { type = "resetPassword" } = req.query;
   const { email } = req.body;
@@ -15,6 +16,19 @@ const post__sendCode = async (req: Request, res: Response) => {
 
     if (type === "sign_up") {
       //이미 회원가입을 한 유저인지 확인
+
+      const rsUser = await prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      });
+
+      if (rsUser) {
+        return res.status(200).json({
+          error: true,
+          message: "A user who exists.",
+        });
+      }
     }
 
     const transporter = nodemailer.createTransport({

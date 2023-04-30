@@ -4,7 +4,7 @@ import { CustomSession } from "../../../interface";
 const post__verifyCode = async (req: Request, res: Response) => {
   const { verifyCode } = req.body;
 
-  if (!verifyCode) {
+  if (!verifyCode || typeof verifyCode !== "string") {
     return res.status(400).json({
       error: true,
       message: "INVALID PARAMS",
