@@ -7,10 +7,7 @@
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "schemes": [
-    "http",
-    "socket"
-  ],
+  "schemes": ["http", "socket"],
   "paths": {
     "/v1/sign/up": {
       "post": {
@@ -448,13 +445,6 @@
         }
       }
     },
-    "/v1/my-page/profile": {
-      "put": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
     "/v1/my-page/": {
       "get": {
         "summary": "내정보 반환 API --> 내정보를 반환하는 API 필요할지.. 고민돼요..",
@@ -612,6 +602,72 @@
         }
       }
     },
+    "/v1/my-page/log-out": {
+      "get": {
+        "summary": "로그아웃 API (미완)",
+        "description": "  ** 로그아웃 api ** <br/>  로그아웃시 강제로 socket connection이 끊김",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "SUCCESS"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "잘못된 데이터 전송 또는 접근으로 인한 오류 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 접근입니다."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "서버 내부의 문제 발생",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "알수없은 문제 발생. 잠시후 다시 실행해주세요."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/my-page/password": {
       "put": {
         "summary": "비밀번호 변경 API (미완)",
@@ -694,13 +750,112 @@
         }
       }
     },
-    "/v1/my-page/log-out": {
-      "get": {
-        "summary": "로그아웃 API (미완)",
-        "description": "  ** 로그아웃 api ** <br/>  로그아웃시 강제로 socket connection이 끊김",
-        "parameters": [],
+    "/v1/my-page/profile": {
+      "put": {
+        "summary": "프로필 변경 API",
+        "description": "  ** 내 프로필 정보를 변경하는 API 입니다. **",
+        "parameters": [
+          {
+            "name": "fieldName : image",
+            "in": "formData",
+            "description": "변경할 프로필 데이터 전송",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "image": {
+                  "type": "string",
+                  "example": "file 데이터 전송"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
+            "description": "정상적으로 프로필 변경 완료",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "updatedProfileUrl": {
+                  "type": "string",
+                  "example": "newProfileUrl"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 데이터 전송 또는 접근으로 인한 오류 반환,socket 문제 발생시 전송 가능",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 접근입니다."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "서버 내부의 문제 발생",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "알수없은 문제 발생. 잠시후 다시 실행해주세요."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/my-page/nick-name": {
+      "put": {
+        "summary": "닉네임 변경 API",
+        "description": "  ** 내 닉네임 정보를 변경하는 API 입니다. **",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "변경할 닉네임 데이터 전송",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "newNickName": {
+                  "type": "string",
+                  "example": "철수"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "정상적으로 닉네임 변경 완료",
             "schema": {
               "type": "object",
               "properties": {
@@ -716,8 +871,7 @@
               "xml": {
                 "name": "main"
               }
-            },
-            "description": "OK"
+            }
           },
           "400": {
             "description": "잘못된 데이터 전송 또는 접근으로 인한 오류 반환",
@@ -961,170 +1115,6 @@
                       "example": "속도"
                     }
                   }
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/socket/updateProfile": {
-      "put": {
-        "summary": "프로필 변경 API (미완)",
-        "description": "  ** 내 프로필 정보를 변경하는 API 입니다. **",
-        "parameters": [
-          {
-            "name": "form-data",
-            "in": "form-data",
-            "discription": "변경할 프로필 데이터 전송",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "newProfile": {
-                  "type": "string",
-                  "example": "data.."
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "정상적으로 프로필 변경 완료",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "SUCCESS"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "400": {
-            "description": "잘못된 데이터 전송 또는 접근으로 인한 오류 반환",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "잘못된 접근입니다."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "서버 내부의 문제 발생",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "알수없은 문제 발생. 잠시후 다시 실행해주세요."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/socket/updatNickname": {
-      "put": {
-        "summary": "닉네임 변경 API (미완)",
-        "description": "  ** 내 닉네임 정보를 변경하는 API 입니다. **",
-        "parameters": [
-          {
-            "name": "form-data",
-            "in": "form-data",
-            "discription": "변경할 닉네임 데이터 전송",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "newNickname": {
-                  "type": "string",
-                  "example": "철수"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "정상적으로 닉네임 변경 완료",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "SUCCESS"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "400": {
-            "description": "잘못된 데이터 전송 또는 접근으로 인한 오류 반환",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "잘못된 접근입니다."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "서버 내부의 문제 발생",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "알수없은 문제 발생. 잠시후 다시 실행해주세요."
                 }
               },
               "xml": {
