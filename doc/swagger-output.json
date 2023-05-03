@@ -163,61 +163,6 @@
         }
       }
     },
-    "/v1/sign/out": {
-      "delete": {
-        "summary": "로그아웃 API",
-        "description": "  ** 로그아웃 API 입니다. ** <br/><br/>  로그아웃으로 해뒀는데... 이부분은 회원탈퇴로 바꿀까... 고민  ",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "회정 정보",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "refreshToken": {
-                  "type": "string",
-                  "example": "반환할 리프레시 토큰 전송"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "** 로그아웃 결과**",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "ok": {
-                  "type": "boolean",
-                  "example": true
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "잘못된 접근시",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "boolean",
-                  "example": true
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/auth/send-code": {
       "post": {
         "summary": "이메일인 인증 코드 전송 API",
@@ -323,7 +268,7 @@
     },
     "/v1/friends/list": {
       "get": {
-        "summary": "친구 리스트 불러오기 API (테스팅)",
+        "summary": "친구 리스트 불러오기 API",
         "description": "  ** 친구리스트를 전송해주는 API 입니다. **",
         "parameters": [],
         "responses": {
@@ -363,7 +308,7 @@
     },
     "/v1/friends/request-list": {
       "get": {
-        "summary": "친구요청대기 리스트 불러오기 API (테스팅)",
+        "summary": "친구요청대기 리스트 불러오기 API",
         "description": "  ** 친구요청대기 리스트를 전송해주는 API 입니다. **",
         "parameters": [],
         "responses": {
@@ -403,7 +348,7 @@
     },
     "/v1/friends/request": {
       "post": {
-        "summary": "친구 신청 API (테스팅)",
+        "summary": "친구 신청 API",
         "description": "  ** 친구 신청을 담당하는 API입니다 **<br/><br/>  1. 친구요청 방법은 링크,QR 코드로 초대 가능합니다.  ",
         "parameters": [
           {

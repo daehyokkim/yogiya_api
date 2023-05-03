@@ -7,7 +7,7 @@ router.get(
   friendCtrl.get.friendList
 
   /*
-      #swagger.summary = "친구 리스트 불러오기 API (테스팅)"
+      #swagger.summary = "친구 리스트 불러오기 API"
       #swagger.description = '
       ** 친구리스트를 전송해주는 API 입니다. **'
    
@@ -26,7 +26,7 @@ router.get(
   "/request-list",
   friendCtrl.get.requestList
   /*
-        #swagger.summary = "친구요청대기 리스트 불러오기 API (테스팅)"
+        #swagger.summary = "친구요청대기 리스트 불러오기 API"
         #swagger.description = '
         ** 친구요청대기 리스트를 전송해주는 API 입니다. **'
        
@@ -44,7 +44,7 @@ router.post(
   "/request",
   friendCtrl.post.request
   /*
-    #swagger.summary = "친구 신청 API (테스팅)"
+    #swagger.summary = "친구 신청 API"
     #swagger.description = '
     ** 친구 신청을 담당하는 API입니다 **<br/><br/>
     1. 친구요청 방법은 링크,QR 코드로 초대 가능합니다.
