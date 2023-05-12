@@ -2,31 +2,26 @@ import { CustomSocket } from "interface";
 import SocketServer from "../../socket";
 import prisma from "../../prisma";
 // import onLogIn from "./onLogIn";
+import Utils from "../../utiles/utile";
 
 const onClientConnected = (_socket: CustomSocket) => {
   try {
     let socketServer = SocketServer.instance;
 
-    if (!_socket.authorization && process.env.NODE_ENV !== "test") {
-      _socket.emit("/error", {
-        message: "accessToken 만료.. 다시 로그인 해주세요",
-      });
+    if (!_socket.authorization) {
       _socket.disconnect();
     }
 
-    _socket.on("login", async (data) => {
-      console.log("login");
-      if (process.env.NODE_ENV === "test") {
-        _socket.userEmail = data.email;
-      }
-
+    _socket.on("login", async () => {
+      let sendData = Utils.netMessage(false, "");
       if (!_socket.userEmail) {
-        console.log("잘못된 접근입니다!");
+        sendData.error = true;
+        sendData.message = "잘못된 접근입니다.";
       } else {
+        let rsfriendInfo: any = [];
         _socket.room = _socket.userEmail;
         socketServer.sockets[_socket.userEmail] = _socket;
         _socket.join(_socket.userEmail);
-        console.log("내방 생성!");
 
         const friendInfo = await prisma.friendInfo.findUnique({
           where: {
@@ -43,158 +38,189 @@ const onClientConnected = (_socket: CustomSocket) => {
           _socket.requestFriends = JSON.parse(friendInfo.pendingList);
           const inUserId = _socket.friends.join(",");
 
-          const rsFriends: any =
-            await prisma.$queryRaw`SELECT * FROM User WHERE id IN (${inUserId})`;
-          if (rsFriends) {
-            for (const key in rsFriends) {
-              _socket.join(rsFriends[key].email);
+          rsfriendInfo = await prisma.$queryRaw`
+          SELECT u.email as email, u.nickName , d.latitude, d.longitude, d.battery,d.speed , p.filePath  FROM User as u INNER JOIN DeviceInfo as d ON u.id = d.userId JOIN Profile as p ON u.id = p.userId WHERE u.id IN (${inUserId}) ;`;
+
+          if (rsfriendInfo) {
+            for (const key in rsfriendInfo) {
+              _socket.join(rsfriendInfo[key].email);
             }
           }
         }
-
-        console.log("room");
-        console.log(socketServer.io.sockets.adapter.rooms);
-
-        //return data
+        sendData.data = {
+          friendList: rsfriendInfo,
+        };
         //친구 정보 및 디바이스 데이터를 리턴 시켜줘야 듯..??
       }
+      _socket.emit("login", sendData);
     });
 
     // 클라이언트로부터 위치 정보를 받는 핸들러
-    _socket.on("sendLocation", async () => {
+    _socket.on("sendLocation", async (data) => {
+      let sendData = Utils.netMessage(false, "");
       // console.log(`새로운 위치 정보: ${data.location}`);
       // 현재 소켓이 속한 방에 있는 클라이언트들에게 위치 정보를 전송
-      await prisma.deviceInfo.update({
-        where: {
-          userId: _socket.userId,
-        },
-        data: {
-          longitude: 1,
-          latitude: 2,
-          battery: 10,
-        },
-      });
-      _socket.broadcast.to(_socket.room).emit("updateLocation", 1);
+
+      if (!data.longitude || !data.latitude || !data.battery || !data.speed) {
+        sendData.error = true;
+        sendData.message = "잘못된 접근입니다.";
+      } else {
+        await prisma.deviceInfo.update({
+          where: {
+            userId: _socket.userId,
+          },
+          data: {
+            longitude: data.longitude,
+            latitude: data.latitude,
+            battery: data.battery,
+            speed: data.speed,
+          },
+        });
+        data.email = _socket.userEmail;
+        _socket.broadcast.to(_socket.room).emit("updateLocation", data);
+      }
+      _socket.emit("sendLocation", sendData);
     });
 
     //친구수락 핸들러
     _socket.on("setRequest", async (data) => {
-      const friend = await prisma.user.findUnique({
-        where: {
-          email: data.email,
-        },
-        select: {
-          id: true,
-          FriendInfo: {
-            select: {
-              connectedList: true,
+      let sendData = Utils.netMessage(false, "");
+      if (!data.email) {
+        sendData.error = true;
+        sendData.message = "잘못된 접근입니다.";
+      } else {
+        const friend = await prisma.user.findUnique({
+          where: {
+            email: data.email,
+          },
+          select: {
+            id: true,
+            FriendInfo: {
+              select: {
+                connectedList: true,
+              },
             },
           },
-        },
-      });
-
-      if (!friend) {
-        console.log("not user info");
-      }
-      _socket.requestFriends = _socket.requestFriends.filter(
-        (value: number) => {
-          return value != friend?.id;
-        }
-      );
-      if (data.answer) {
-        _socket.friends.push(friend?.id);
-
-        await prisma.friendInfo.update({
-          where: { userId: _socket.userId },
-          data: {
-            pendingList: JSON.stringify(_socket.requestFriends),
-            connectedList: JSON.stringify(_socket.friends),
-          },
-        });
-        let tempMyFriend = friend?.FriendInfo
-          ? JSON.parse(friend?.FriendInfo?.connectedList)
-          : [];
-        tempMyFriend.push(_socket.userId);
-        if (socketServer.sockets[data.email]) {
-          socketServer.sockets[data.email].friend = tempMyFriend;
-        }
-
-        await prisma.friendInfo.update({
-          where: {
-            userId: friend?.id,
-          },
-          data: {
-            connectedList: JSON.stringify(tempMyFriend),
-          },
         });
 
-        //수락한 친구에게 push알림 전송 해야됨
-
-        console.log(`방 입장: ${data.email}`);
-        if (socketServer.sockets[data.email]) {
-          _socket.join(data.email);
-          let friendSocket = socketServer.sockets[data.email];
-          friendSocket.join(_socket.userEmail);
-          console.log("내방에 친구 입장");
+        if (!friend) {
+          sendData.error = true;
+          sendData.message = "존재하지 않는유저입니다.";
         } else {
-          console.log("존재하지안은 방입니다.");
-        }
-      } else {
-        await prisma.friendInfo.update({
-          where: { userId: _socket.userId },
-          data: {
-            pendingList: JSON.stringify(_socket.requestFriends),
-          },
-        });
+          if (_socket.requestFriends.indexOf(friend.id) === -1) {
+            sendData.error = true;
+            sendData.message = "존재하지 않는유저입니다.";
+          } else {
+            _socket.requestFriends = _socket.requestFriends.filter(
+              (value: number) => {
+                return value != friend?.id;
+              }
+            );
+            if (data.answer) {
+              _socket.friends.push(friend?.id);
 
-        console.log("친구 거절 완료");
+              await prisma.friendInfo.update({
+                where: { userId: _socket.userId },
+                data: {
+                  pendingList: JSON.stringify(_socket.requestFriends),
+                  connectedList: JSON.stringify(_socket.friends),
+                },
+              });
+              let tempMyFriend = friend?.FriendInfo
+                ? JSON.parse(friend?.FriendInfo?.connectedList)
+                : [];
+              tempMyFriend.push(_socket.userId);
+              if (socketServer.sockets[data.email]) {
+                socketServer.sockets[data.email].friend = tempMyFriend;
+              }
+
+              await prisma.friendInfo.update({
+                where: {
+                  userId: friend?.id,
+                },
+                data: {
+                  connectedList: JSON.stringify(tempMyFriend),
+                },
+              });
+
+              //수락한 친구에게 push알림 전송 해야됨
+
+              if (socketServer.sockets[data.email]) {
+                _socket.join(data.email);
+                let friendSocket = socketServer.sockets[data.email];
+                friendSocket.join(_socket.userEmail);
+              }
+              const rsfriendInfo = await prisma.$queryRaw`
+              SELECT u.email as email, u.nickName , d.latitude, d.longitude, d.battery,d.speed , p.filePath  FROM User as u INNER JOIN DeviceInfo as d ON u.id = d.userId JOIN Profile as p ON u.id = p.userId WHERE u.id = ${friend.id} ;`;
+
+              sendData.data = rsfriendInfo;
+            } else {
+              await prisma.friendInfo.update({
+                where: { userId: _socket.userId },
+                data: {
+                  pendingList: JSON.stringify(_socket.requestFriends),
+                },
+              });
+            }
+          }
+        }
       }
+      _socket.emit("setRequest", sendData);
     });
 
     // 친구 삭제 핸들러
     _socket.on("deleteFriend", async (data) => {
-      const friend = await prisma.user.findUnique({
-        where: {
-          email: data.email,
-        },
-        select: {
-          id: true,
-        },
-      });
-      if (friend) {
-        console.log(_socket.friends);
-        _socket.friends = _socket.friends.filter((value: number) => {
-          return value != friend?.id;
-        });
-        socketServer.sockets[data.email].friends = socketServer.sockets[
-          data.email
-        ].friends.filter((value: number) => {
-          return value != _socket.userId;
-        });
-        await prisma.friendInfo.update({
-          where: { userId: _socket.userId },
-          data: {
-            connectedList: JSON.stringify(_socket.friends),
-          },
-        });
-        await prisma.friendInfo.update({
-          where: {
-            userId: socketServer.sockets[data.email].userId,
-          },
-          data: {
-            connectedList: JSON.stringify(
-              socketServer.sockets[data.email].friends
-            ),
-          },
-        });
-
-        //mySocket leave
-        console.log("친구 룸에서 퇴장");
-        socketServer.sockets[data.email].leave(_socket.room);
-        console.log("내룸에서 친구 퇴장");
+      let sendData = Utils.netMessage(false, "");
+      if (!data.email) {
+        sendData.error = true;
+        sendData.message = "잘못된 접근입니다";
       } else {
-        console.log("not user info");
+        const friend = await prisma.user.findUnique({
+          where: {
+            email: data.email,
+          },
+          select: {
+            id: true,
+          },
+        });
+        if (friend) {
+          _socket.friends = _socket.friends.filter((value: number) => {
+            return value != friend?.id;
+          });
+
+          let deleteFriend = socketServer.sockets[data.email];
+          deleteFriend.friends = socketServer.sockets[
+            data.email
+          ].friends.filter((value: number) => {
+            return value != _socket.userId;
+          });
+
+          //내정보에서 친구삭제
+          await prisma.friendInfo.update({
+            where: { userId: _socket.userId },
+            data: {
+              connectedList: JSON.stringify(_socket.friends),
+            },
+          });
+          //친구정보에서 나삭제
+          await prisma.friendInfo.update({
+            where: {
+              userId: deleteFriend.userId,
+            },
+            data: {
+              connectedList: JSON.stringify(deleteFriend.friends),
+            },
+          });
+          //친구룸에서 퇴장
+          _socket.leave(deleteFriend.room);
+          //내룸에서 퇴장
+          deleteFriend.leave(_socket.room);
+        } else {
+          sendData.error = true;
+          sendData.message = "잘못된 접근입니다";
+        }
       }
+      _socket.emit("deleteFriend", sendData);
     });
 
     // 클라이언트와의 연결이 끊어졌을 때 핸들러
