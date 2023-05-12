@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import prisma from "../../prisma";
 import { CustomSession } from "../../../interface";
 const post__sign_up = async (req: Request, res: Response) => {
-  const { email, password, nickname = "test" } = req.body;
+  const { email, password, nickname = "test", googleFlag = false } = req.body;
   let session: CustomSession = req.session;
 
   try {
@@ -35,6 +35,7 @@ const post__sign_up = async (req: Request, res: Response) => {
         email: email,
         password: hash,
         nickname: nickname,
+        googleflag: googleFlag,
       },
     });
 
