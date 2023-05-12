@@ -13,6 +13,8 @@ router.get(
  #swagger.responses[200] ={
     description : '정상적으로 connection 연결시.. 단,fornt에서 endPoint 가 정해지면 가능함',
    schema :{
+      error : false,
+      message : "",
       data :{
          friendList :[
             {
@@ -37,33 +39,35 @@ router.get(
   "/log-out",
   () => {}
   /*
-                  #swagger.summary = "로그아웃 API"
-                  #swagger.description = '
-                  ** 로그아웃 api ** <br/>
-                  로그아웃시 강제로 socket connection이 끊김'
-                  #swagger.responses[200] = {
-                      schema:{
-                          error : false,
-                          message : 'SUCCESS'
-                      }
-                  } 
+        #swagger.summary = "로그아웃 API"
+        #swagger.description = '
+            ** 로그아웃 api ** <br/>
+            로그아웃시 강제로 socket connection이 끊김'
+        #swagger.responses[200] = {
+            schema:{
+                    error : false,
+                    message : 'SUCCESS',
+                    data :{}
+                    }
+        } 
           
-                  #swagger.responses[400] = {
-                      description : '잘못된 데이터 전송 또는 접근으로 인한 오류 반환',
-                      schema:{
-                          error: true,
-                          message : "잘못된 접근입니다."
-                      }
-                  }
-                  #swagger.responses[500] = {
-                      description : '서버 내부의 문제 발생',
-                      schema:{
-                          error : true,
-                          message : "알수없은 문제 발생. 잠시후 다시 실행해주세요."
-                      }
-                  }
-            
-            */
+        #swagger.responses[400] = {
+            description : '잘못된 데이터 전송 또는 접근으로 인한 오류 반환',
+            schema:{
+                    error: true,
+                    message : "잘못된 접근입니다.",
+                    data : {}
+                }
+            }
+        #swagger.responses[500] = {
+            description : '서버 내부의 문제 발생',
+                schema:{
+                    error : true,
+                    message : "알수없은 문제 발생. 잠시후 다시 실행해주세요.",
+                    data : {}
+                    }
+                }
+    */
 );
 router.delete(
   "/deleteFriend",
@@ -114,25 +118,21 @@ router.post(
         }
      #swagger.responses[200] = {
             description : "
-            친구 수락시\n
-                ```
-                data:{
-                    nickName : '철수',
-                    email : '이메일',
-                    profile : 'URL',
-                    latitude : '위도',
-                    longitude : '경도',
-                    battery : '베터리',
-                    speed : '속도',
-                }
-                ```\n\n
-            거절시\n
-                ```
-                data:{
-                ....음 이부분은 어떻게 보내주는게 편한지 회의해보기
-                }
-                ```
+            수락시 아래 친구 정보를 보내주고 거절하면 data 값 없음
          ",
+         schema:{
+            error:false,
+            message:"",
+            data:{
+                nickName : '철수',
+                email : '이메일',
+                profile : 'URL',
+                latitude : '위도',
+                longitude : '경도',
+                battery : '베터리',
+                speed : '속도',
+                }
+            }
         }
      */
 );
@@ -151,27 +151,37 @@ router.put(
                 discription: '변경할 비밀번호 데이터 전송',
                 required : true,
                 schema:{
-                    data :{
                         latitude : '위도',
                         longitude : '경도',
                         battery : '베터리',
                         speed : '속도',
-                    }
-                    
                 }
         }
      #swagger.responses[200] =  {
-        description : ' fornt에서 endPoint 가 정해지면 가능함',
+        description : '
+        친구에게 보내는 socket endPoint : updateLocation \n\n
+```
+        {
+            error : false,
+            message : "",
+            data :{
+                email : "변경된 유저 이메일",
+                latitude : "위도",
+                longitude : "경도",
+                battery : "베터리",
+                speed : "속도"
+        }
+        }
+        
+```
+        ',
         schema :{
-               data :{
-                        latitude : '위도',
-                        longitude : '경도',
-                        battery : '베터리',
-                        speed : '속도',
-                    } 
-            }
+            error : false,
+            message : "",
+            data : {}
     
         }
+    }
     */
 );
 
