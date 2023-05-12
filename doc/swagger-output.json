@@ -807,6 +807,14 @@
             "schema": {
               "type": "object",
               "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                },
                 "data": {
                   "type": "object",
                   "properties": {
@@ -874,6 +882,10 @@
                 "message": {
                   "type": "string",
                   "example": "SUCCESS"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {}
                 }
               },
               "xml": {
@@ -894,6 +906,10 @@
                 "message": {
                   "type": "string",
                   "example": "잘못된 접근입니다."
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {}
                 }
               },
               "xml": {
@@ -913,6 +929,10 @@
                 "message": {
                   "type": "string",
                   "example": "알수없은 문제 발생. 잠시후 다시 실행해주세요."
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {}
                 }
               },
               "xml": {
@@ -994,27 +1014,33 @@
         ],
         "responses": {
           "200": {
-            "description": "  친구 수락시\n  ```  data:{  nickName : '철수',  email : '이메일',  profile : 'URL',  latitude : '위도',  longitude : '경도',  battery : '베터리',  speed : '속도',  }  ```\n\n  거절시\n  ```  data:{  ....음 이부분은 어떻게 보내주는게 편한지 회의해보기  }  ```  "
-          }
-        }
-      }
-    },
-    "/socket/sendLocation": {
-      "put": {
-        "summary": "내위치 전송 통신",
-        "description": "**내 정보를 전송하고, 내 룸에 있는 친구들에게 브로드케스트 통신을 전송합니다.**  ",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "discription": "변경할 비밀번호 데이터 전송",
-            "required": true,
+            "description": "  수락시 아래 친구 정보를 보내주고 거절하면 data 값 없음  ",
             "schema": {
               "type": "object",
               "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                },
                 "data": {
                   "type": "object",
                   "properties": {
+                    "nickName": {
+                      "type": "string",
+                      "example": "철수"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "이메일"
+                    },
+                    "profile": {
+                      "type": "string",
+                      "example": "URL"
+                    },
                     "latitude": {
                       "type": "string",
                       "example": "위도"
@@ -1033,36 +1059,65 @@
                     }
                   }
                 }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/socket/sendLocation": {
+      "put": {
+        "summary": "내위치 전송 통신",
+        "description": "**내 정보를 전송하고, 내 룸에 있는 친구들에게 브로드케스트 통신을 전송합니다.**  ",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "discription": "변경할 비밀번호 데이터 전송",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "latitude": {
+                  "type": "string",
+                  "example": "위도"
+                },
+                "longitude": {
+                  "type": "string",
+                  "example": "경도"
+                },
+                "battery": {
+                  "type": "string",
+                  "example": "베터리"
+                },
+                "speed": {
+                  "type": "string",
+                  "example": "속도"
+                }
               }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": " fornt에서 endPoint 가 정해지면 가능함",
+            "description": "  친구에게 보내는 socket endPoint : updateLocation \n\n ```  {  error : false,  message : \"\",  data :{  email : \"변경된 유저 이메일\",  latitude : \"위도\",  longitude : \"경도\",  battery : \"베터리\",  speed : \"속도\"  }  }   ```  ",
             "schema": {
               "type": "object",
               "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                },
                 "data": {
                   "type": "object",
-                  "properties": {
-                    "latitude": {
-                      "type": "string",
-                      "example": "위도"
-                    },
-                    "longitude": {
-                      "type": "string",
-                      "example": "경도"
-                    },
-                    "battery": {
-                      "type": "string",
-                      "example": "베터리"
-                    },
-                    "speed": {
-                      "type": "string",
-                      "example": "속도"
-                    }
-                  }
+                  "properties": {}
                 }
               },
               "xml": {
