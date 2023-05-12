@@ -8,17 +8,17 @@ datasource db {
 }
 
 model User {
-  id          Int         @id @default(autoincrement())
-  email       String      @unique
-  nickname    String
-  password    String
-  googleflage Boolean     @default(false)
-  createAt    DateTime    @default(now())
-  updateAt    DateTime?
-  DeviceInfo  DeviceInfo?
-  FriendInfo  FriendInfo?
-  Profile     Profile?
-  UserExtra   UserExtra?
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  nickname   String
+  password   String
+  googleflag Boolean     @default(false)
+  createAt   DateTime    @default(now())
+  updateAt   DateTime?
+  DeviceInfo DeviceInfo?
+  FriendInfo FriendInfo?
+  Profile    Profile?
+  UserExtra  UserExtra?
 }
 
 model Profile {
@@ -33,24 +33,15 @@ model Profile {
 }
 
 model DeviceInfo {
-  id        Int        @id @default(autoincrement())
-  userId    Int        @unique
+  id        Int    @id @default(autoincrement())
+  userId    Int    @unique
   latitude  Float?
   longitude Float?
   battery   Int?
-  speedId   Int?
-  SpeedType SpeedType? @relation(fields: [speedId], references: [id], onDelete: Restrict)
-  User      User       @relation(fields: [userId], references: [id])
+  speed     Int    @default(0)
+  User      User   @relation(fields: [userId], references: [id])
 
   @@index([userId], map: "User_Fk")
-  @@index([speedId], map: "SpeedType_Fk")
-}
-
-model SpeedType {
-  id         Int          @id @default(autoincrement())
-  type       String
-  isFlag     Boolean      @default(true)
-  DeviceInfo DeviceInfo[]
 }
 
 model FriendInfo {
