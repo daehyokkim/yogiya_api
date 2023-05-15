@@ -58,7 +58,6 @@ const post__sendCode = async (req: Request, res: Response) => {
       email,
       otp: hash,
     };
-    console.log(session.verifyEmail);
     const VERIFY_MESSAGE = `<div id="readFrame">
     <table
       style="text-align: center; border: 5px solid #eee"
@@ -146,8 +145,7 @@ const post__sendCode = async (req: Request, res: Response) => {
         html: VERIFY_MESSAGE,
         tesx: "인증메일입니다.",
       };
-      const info = await transporter.sendMail(mailOption);
-      console.log(info);
+      await transporter.sendMail(mailOption);
     } else {
       console.log(verifyCode);
     }

@@ -10,7 +10,6 @@ import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 const post_sign_up = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  console.log(email);
   try {
     if (!email || !password) {
       return res.status(400).json({
@@ -28,7 +27,6 @@ const post_sign_up = async (req: Request, res: Response) => {
         nickname: true,
       },
     });
-    console.log(user);
     if (!user) {
       return res.status(200).json({
         error: true,
@@ -47,7 +45,6 @@ const post_sign_up = async (req: Request, res: Response) => {
     const accessToken = generateAccessToken(user.email, user.id);
     const refreshToken = generateRefreshToken(user.email, user.id);
     const verifiedRefreshToken = verifyRefreshToken(refreshToken) as JwtPayload;
-    console.log(verifiedRefreshToken);
     if (!verifiedRefreshToken || !verifiedRefreshToken.exp) {
       return res
         .status(500)

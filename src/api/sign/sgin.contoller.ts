@@ -99,41 +99,5 @@ router.post(
     }
 */
 );
-// router.delete(
-//   "/out",
-//   signCtrl.post.sing_out
-//   /*
-//       #swagger.summary = "로그아웃 API"
-//       #swagger.description = '
-//       ** 로그아웃 API 입니다. ** <br/><br/>
-//       로그아웃으로 해뒀는데... 이부분은 회원탈퇴로 바꿀까... 고민
-//       '
-//       #swagger.parameters['obj']= {
-
-//           in : 'body',
-//           name : 'body',
-//           description : '회정 정보',
-//           required : true,
-//           schema :{
-//             refreshToken : "반환할 리프레시 토큰 전송"
-//           }
-
-//       }
-
-//       #swagger.responses[200] = {
-//           description : '** 로그아웃 결과**',
-//           schema:{
-//             ok : true
-//           }
-//       }
-
-//       #swagger.responses[500] = {
-//           description: '잘못된 접근시',
-//           schema:{
-//               error: true,
-//           }
-//       }
-//   */
-// );
 
 export default router;
