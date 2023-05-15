@@ -28,8 +28,8 @@ router.post(
     #swagger.responses[200] = {
         description : '회원가입 성공!',
         schema:{
-            error:false,
-            message:"SUCCESS_SIGN_UP",
+            accessToken: "accessToken",
+            refreshToken: "refreshToken"
         }
     }
 
