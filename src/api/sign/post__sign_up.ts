@@ -22,9 +22,10 @@ const post__sign_up = async (req: Request, res: Response) => {
     }
     //오류처리
     if (
-      !session.verifyEmail ||
-      session.verifyEmail.email !== email ||
-      !session.verifyEmail.verified
+      !googleFlag &&
+      (!session.verifyEmail ||
+        session.verifyEmail.email !== email ||
+        !session.verifyEmail.verified)
     ) {
       return res.status(400).json({
         error: true,

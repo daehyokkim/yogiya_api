@@ -11,7 +11,7 @@ import { JwtPayload } from "jsonwebtoken";
 const post_sign_up = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
-    if (!email || !password) {
+    if (!email) {
       return res.status(400).json({
         error: true,
         message: "INVALID PARAMS",
@@ -25,6 +25,7 @@ const post_sign_up = async (req: Request, res: Response) => {
         email: true,
         password: true,
         nickname: true,
+        googleflag: true,
       },
     });
     if (!user) {
@@ -34,12 +35,21 @@ const post_sign_up = async (req: Request, res: Response) => {
       });
     }
 
-    const rhash: any = replaceHash(user.password);
-    if (!bcrypt.compareSync(password, rhash)) {
-      return res.status(200).json({
-        error: true,
-        message: "비밀번호 또는 이메일이 올바르지 않습니다.",
-      });
+    if (!user.googleflag) {
+      if (!password) {
+        return res.status(400).json({
+          error: true,
+          message: "INVALID PARAMS",
+        });
+      }
+
+      const rhash: any = replaceHash(user.password);
+      if (!bcrypt.compareSync(password, rhash)) {
+        return res.status(200).json({
+          error: true,
+          message: "비밀번호 또는 이메일이 올바르지 않습니다.",
+        });
+      }
     }
 
     const accessToken = generateAccessToken(user.email, user.id);
