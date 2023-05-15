@@ -22,26 +22,22 @@ model User {
 }
 
 model Profile {
-  id       Int    @id @default(autoincrement())
-  userId   Int    @unique
-  filePath String @default("0") @db.VarChar(255)
-  fileType String @default("0") @db.VarChar(127)
-  fileSize Int    @default(0)
-  User     User   @relation(fields: [userId], references: [id])
-
-  @@index([userId], map: "User_Fk")
+  id       Int     @id @default(autoincrement())
+  userId   Int     @unique(map: "UserId")
+  filePath String? @db.VarChar(255)
+  fileType String  @default("0") @db.VarChar(127)
+  fileSize Int     @default(0)
+  User     User    @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Profile_UserId_FK")
 }
 
 model DeviceInfo {
   id        Int    @id @default(autoincrement())
-  userId    Int    @unique
+  userId    Int    @unique(map: "UserId")
   latitude  Float?
   longitude Float?
   battery   Int?
   speed     Int    @default(0)
-  User      User   @relation(fields: [userId], references: [id])
-
-  @@index([userId], map: "User_Fk")
+  User      User   @relation(fields: [userId], references: [id], onDelete: Cascade, map: "DeviceInfo_UserId_FK")
 }
 
 model FriendInfo {
@@ -49,7 +45,7 @@ model FriendInfo {
   userId        Int    @unique(map: "userId")
   connectedList String @db.LongText
   pendingList   String @db.LongText
-  User          User   @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "userId_fk")
+  User          User   @relation(fields: [userId], references: [id], onDelete: Cascade, map: "userId_fk")
 }
 
 model Setting {
