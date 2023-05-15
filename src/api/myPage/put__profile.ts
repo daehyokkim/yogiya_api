@@ -7,7 +7,6 @@ const put__profile = async (req: Request, res: Response) => {
     const file = req.file;
     const user = req.decodedUser;
     const socketServer = SocketServer.instance;
-    console.log(socketServer.sockets);
     const s3 = new S3({
       accessKeyId: process.env.S3_ACCESS_KEY_ID,
       secretAccessKey: process.env.S3_SECRET_KEY,
@@ -31,7 +30,6 @@ const put__profile = async (req: Request, res: Response) => {
         console.log(err);
         return res.status(500).json({ ok: false, error: err });
       }
-      console.log(user);
       await prisma.profile.update({
         where: {
           userId: user.id,
@@ -67,7 +65,6 @@ const put__profile = async (req: Request, res: Response) => {
 
     return;
   } catch (error) {
-    console.log("sts");
     console.error(error);
     return res.status(500).json({
       error: false,
