@@ -21,7 +21,7 @@ const post__verifyCode = async (req: Request, res: Response) => {
     }
     //오류 처리해야뎀
     if (session.verifyEmail.count === 5) {
-      return res.status(200).json({
+      return res.status(429).json({
         error: true,
         message: "TOO_MANY_REQUEST",
       });
@@ -38,9 +38,10 @@ const post__verifyCode = async (req: Request, res: Response) => {
       } else {
         session.verifyEmail.count++;
       }
-      return res.status(500).json({
+      return res.status(401).json({
         error: true,
         message: "WRONG_CODE",
+        falseCount: session.verifyEmail.count,
       });
     }
   } catch (e) {

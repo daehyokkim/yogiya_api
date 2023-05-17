@@ -22,19 +22,18 @@ router.post(
       }
   }
   #swagger.responses[200] = {
-      description : '정상적으로 서버와 통신된 경우\n\n
-      retrun 형식은 임시로 정해두겠습니다.
-      1. 정상적으로 이메일이 보내진 경우\n
-      ```
-          error : false,
-          message : "SUCCESS"
-      ```
-      '
-  }
+      description : '정상적으로 서버와 통신된 경우',
+      schema:{
+        error:false,
+        message:"SUCCES",
+        maxCount:5
+      }
+      
+    }
   #swagger.responses[400] = {
       description : '올바르지 않은 이메일 형식을 보낸경우\n\n',
       schema:{
-          error: false,
+          error: true,
           message : "VALIDATION_ERROR"
       }
        
@@ -105,29 +104,33 @@ router.post(
     }
     
     #swagger.responses[200] = {
-        description : '정상적으로 서버와 통신에 성공하였으나 오류가 발생할 수 있습니다.\n\n
-        1. 성공\n
-        ```
+        description : '정상적으로 서버와 통신에 성공시',
+        schema:{
             error:false,
             message:"VERIFY_SECCESS"
-        ```\n\n
-        2. 인증코드 유효시간이 만기된 경우.\n
-        ```
+        }
+    }
+     #swagger.responses[400] = {
+        description : '잘못된 접근',
+        schema:{
+             error: true,
+            message: "TO_LATE_CODE",
+        }
+    }
+     #swagger.responses[429] = {
+        description : '입력 횟수 초과',
+        schema:{
+             error: true,
+            message: "TOO_MANY_REQUEST",
+        }
+   }
+     #swagger.responses[401] = {
+        description : '잘못된 인증코드 전송',
+        schema:{
             error: true,
-            message : "TO_LATE_CODE",
-        ```\n\n
-        3. 잘못된 인증번호 전송한 경우.\n
-        ```
-            error: true,
-            message : "WRONG_CODE",
-        ```\n\n
-
-        4. 최대 입력횟수를 초과한 경우.\n
-        ```
-            error: true,
-            message : "TOO_MAMY_REQUEST",
-        ```\n\n
-        '
+            message: "WRONG_CODE",
+            falseCount: 5,
+        }
     }
 */
 );

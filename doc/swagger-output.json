@@ -186,7 +186,27 @@
         ],
         "responses": {
           "200": {
-            "description": "정상적으로 서버와 통신된 경우\n\n  retrun 형식은 임시로 정해두겠습니다.  1. 정상적으로 이메일이 보내진 경우\n  ```  error : false,  message : \"SUCCESS\"  ```  "
+            "description": "정상적으로 서버와 통신된 경우",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "SUCCES"
+                },
+                "maxCount": {
+                  "type": "number",
+                  "example": 5
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
             "description": "올바르지 않은 이메일 형식을 보낸경우\n\n",
@@ -195,7 +215,7 @@
               "properties": {
                 "error": {
                   "type": "boolean",
-                  "example": false
+                  "example": true
                 },
                 "message": {
                   "type": "string",
@@ -261,7 +281,84 @@
         ],
         "responses": {
           "200": {
-            "description": "정상적으로 서버와 통신에 성공하였으나 오류가 발생할 수 있습니다.\n\n  1. 성공\n  ```  error:false,  message:\"VERIFY_SECCESS\"  ```\n\n  2. 인증코드 유효시간이 만기된 경우.\n  ```  error: true,  message : \"TO_LATE_CODE\",  ```\n\n  3. 잘못된 인증번호 전송한 경우.\n  ```  error: true,  message : \"WRONG_CODE\",  ```\n\n   4. 최대 입력횟수를 초과한 경우.\n  ```  error: true,  message : \"TOO_MAMY_REQUEST\",  ```\n\n  "
+            "description": "정상적으로 서버와 통신에 성공시",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "VERIFY_SECCESS"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 접근",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "TO_LATE_CODE"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "잘못된 인증코드 전송",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "WRONG_CODE"
+                },
+                "falseCount": {
+                  "type": "number",
+                  "example": 5
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "429": {
+            "description": "입력 횟수 초과",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "TOO_MANY_REQUEST"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -277,6 +374,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
                 "friendList": {
                   "type": "array",
                   "items": {
@@ -317,6 +418,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false
+                },
                 "requestList": {
                   "type": "array",
                   "items": {

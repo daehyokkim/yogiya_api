@@ -158,6 +158,7 @@ const post__sendCode = async (req: Request, res: Response) => {
     return res.status(200).json({
       error: false,
       message: "SUCCESS",
+      maxCount: 5,
     });
   } catch (e) {
     console.log(e);
