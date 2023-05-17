@@ -274,6 +274,10 @@
                 "verifyCode": {
                   "type": "string",
                   "example": "인증코드"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "email"
                 }
               }
             }
