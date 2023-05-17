@@ -14,6 +14,7 @@ router.get(
       #swagger.responses[200] = {
         description : '친구 리스트를 반환합니다.',
         schema:{
+            error: false,
             friendList : [{email:'친구 이메일',nickName:"별명" ,profil:"URL"},{email:'친구이메일2',nickName:"닉네임",profile:"URL"}]
         }
     
@@ -33,7 +34,8 @@ router.get(
         #swagger.responses[200] = {
           description : '친구요청대기 리스트를 반환합니다.',
           schema:{
-              requestList : [{email:'친구 이메일',nickName:"별명" ,profil:"URL"},{email:'친구이메일2',nickName:"닉네임",profile:"URL"}]
+            error: false,
+            requestList : [{email:'친구 이메일',nickName:"별명" ,profil:"URL"},{email:'친구이메일2',nickName:"닉네임",profile:"URL"}]
           }
       }
   
