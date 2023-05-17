@@ -10,8 +10,8 @@ import swaggerUi from "swagger-ui-express";
 import swaggerFile from "../doc/swagger-output.json";
 
 import express from "express";
-import session from "express-session";
-
+// import session from "express-session";
+import Session from "./session";
 import http from "http";
 import SocketServer from "./socket";
 
@@ -26,17 +26,20 @@ app.use(
   })
 );
 
-const maxAge: number = 60 * 1000;
-app.use(
-  session({
-    secret: "sol1357@$^",
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: maxAge,
-    },
-  })
-);
+// const maxAge: number = 60 * 1000;
+// app.use(
+//   session({
+//     secret: "sol1357@$^",
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//       maxAge: maxAge,
+//     },
+//   })
+// );
+const session = new Session();
+session.init();
+
 var options = {
   explorer: true,
 };

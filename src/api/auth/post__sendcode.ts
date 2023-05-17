@@ -1,11 +1,12 @@
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import { Request, Response } from "express";
-import { CustomSession } from "../../../interface";
+import Session from "../../session";
 import prisma from "../../prisma";
 const post__sendCode = async (req: Request, res: Response) => {
   const { type = "resetPassword" } = req.query;
   const { email } = req.body;
+  const session = Session.instance;
   try {
     if (!email) {
       return res.status(400).json({
@@ -52,12 +53,8 @@ const post__sendCode = async (req: Request, res: Response) => {
     const verifyCode = Math.floor(Math.random() * (1000000 - 100000) + 100000);
 
     const hash = bcrypt.hashSync(`${verifyCode}`, 8);
-    let session: CustomSession = req.session;
-    //express.session에 verifyEmail{email,otp:hash저장}
-    session.verifyEmail = {
-      email,
-      otp: hash,
-    };
+
+    session.createSession(email, hash);
     const VERIFY_MESSAGE = `<div id="readFrame">
     <table
       style="text-align: center; border: 5px solid #eee"
@@ -151,10 +148,9 @@ const post__sendCode = async (req: Request, res: Response) => {
     }
 
     setTimeout(() => {
-      console.log(`delete Session ${session.verifyEmail}`);
-      delete session.verifyEmail?.otp;
-      console.log(`after delete Session ${session.verifyEmail}`);
-    }, 1000 * 60 * 10);
+      delete session.session[email];
+      console.log(`after delete Session ${session}`);
+    }, 1000 * 60 * 1);
     return res.status(200).json({
       error: false,
       message: "SUCCESS",
