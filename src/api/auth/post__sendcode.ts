@@ -150,7 +150,7 @@ const post__sendCode = async (req: Request, res: Response) => {
     setTimeout(() => {
       delete session.session[email];
       console.log(`after delete Session ${session}`);
-    }, 1000 * 60 * 1);
+    }, 1000 * 60 * 5);
     return res.status(200).json({
       error: false,
       message: "SUCCESS",

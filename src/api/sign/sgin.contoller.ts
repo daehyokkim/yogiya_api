@@ -19,7 +19,6 @@ router.post(
         schema :{
             email : "회원이메일",
             password:"회원비밀번호",
-            nickname : "닉네임",
             googleFlag : "google 회원 유무 : (true/false) bool값으로 주세요" 
         }
 

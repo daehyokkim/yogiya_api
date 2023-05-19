@@ -10,9 +10,9 @@ import { JwtPayload } from "jsonwebtoken";
 import Session from "../../session";
 
 const post__sign_up = async (req: Request, res: Response) => {
-  const { email, password, nickname = "test", googleFlag = false } = req.body;
+  const { email, password, googleFlag = false } = req.body;
   try {
-    if (!email || !password || !nickname) {
+    if (!email || !password) {
       return res.status(400).json({
         error: true,
         message: "INVALID PARAMS",
@@ -39,7 +39,7 @@ const post__sign_up = async (req: Request, res: Response) => {
       data: {
         email: email,
         password: hash,
-        nickname: nickname,
+        nickname: "user",
         googleflag: googleFlag,
       },
     });

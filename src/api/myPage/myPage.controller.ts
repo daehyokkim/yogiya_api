@@ -172,14 +172,19 @@ router.put(
   /*
               #swagger.summary = "닉네임 변경 API"
               #swagger.description = '
-              ** 내 닉네임 정보를 변경하는 API 입니다. **'
+              ** 내 닉네임 정보를 변경하는 API 입니다. ** <br/><br/>
+              type에 따라서 api를 재사용합니다. defalt값은 update_nickname 입니다.<br/>
+              1.type = sign_up : 회원가입 후 닉네임 변경시 사용<br/>
+              2.type = update_nickname : 마이페이지에서 닉네임 변경시 사용
+              '
               #swagger.parameters['obj']= {
                   in : 'body',
                   name : 'body',
                   description: '변경할 닉네임 데이터 전송',
                   required : true,
                   schema:{
-                      newNickName : '철수'
+                      newNickName : '철수',
+                      type : "sigin_up"
                   }
               }
               
