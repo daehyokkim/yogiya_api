@@ -33,10 +33,6 @@
                   "type": "string",
                   "example": "회원비밀번호"
                 },
-                "nickname": {
-                  "type": "string",
-                  "example": "닉네임"
-                },
                 "googleFlag": {
                   "type": "string",
                   "example": "google 회원 유무 : (true/false) bool값으로 주세요"
@@ -274,6 +270,10 @@
                 "verifyCode": {
                   "type": "string",
                   "example": "인증코드"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "email"
                 }
               }
             }
@@ -822,7 +822,7 @@
     "/v1/my-page/nick-name": {
       "put": {
         "summary": "닉네임 변경 API",
-        "description": "  ** 내 닉네임 정보를 변경하는 API 입니다. **",
+        "description": "  ** 내 닉네임 정보를 변경하는 API 입니다. ** <br/><br/>  type에 따라서 api를 재사용합니다. defalt값은 update_nickname 입니다.<br/>  1.type = sign_up : 회원가입 후 닉네임 변경시 사용<br/>  2.type = update_nickname : 마이페이지에서 닉네임 변경시 사용  ",
         "parameters": [
           {
             "name": "body",
@@ -835,6 +835,10 @@
                 "newNickName": {
                   "type": "string",
                   "example": "철수"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "sigin_up"
                 }
               }
             }

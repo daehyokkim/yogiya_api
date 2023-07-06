@@ -98,7 +98,8 @@ router.post(
         description : '인증코드',
         required : true,
         schema :{
-            verifyCode : "인증코드"
+            verifyCode : "인증코드",
+            email : "email"
         }
 
     }

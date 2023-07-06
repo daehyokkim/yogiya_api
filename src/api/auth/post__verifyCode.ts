@@ -1,47 +1,52 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-import { CustomSession } from "../../../interface";
+import Session from "../../session";
 const post__verifyCode = async (req: Request, res: Response) => {
-  const { verifyCode } = req.body;
+  const { verifyCode, email } = req.body;
 
-  if (!verifyCode || typeof verifyCode !== "string") {
+  if (
+    !verifyCode ||
+    typeof verifyCode !== "string" ||
+    !email ||
+    typeof email !== "string"
+  ) {
     return res.status(400).json({
       error: true,
       message: "INVALID PARAMS",
     });
   }
 
-  let session: CustomSession = req.session;
   try {
-    if (!session.verifyEmail?.otp) {
+    let verifyEmail = Session.instance.session[email];
+    if (!verifyEmail) {
       return res.status(400).json({
         error: true,
         message: "TO_LATE_CODE",
       });
     }
-    //오류 처리해야뎀
-    if (session.verifyEmail.count === 5) {
+    if (verifyEmail.count == 5) {
       return res.status(429).json({
         error: true,
         message: "TOO_MANY_REQUEST",
       });
     }
-    if (bcrypt.compareSync(verifyCode, session.verifyEmail.otp)) {
-      session.verifyEmail.verified = true;
+
+    if (bcrypt.compareSync(verifyCode, verifyEmail.otp)) {
+      verifyEmail.verified = true;
       return res.status(200).json({
         error: false,
         message: "VERIFY_SUCCESS",
       });
     } else {
-      if (!session.verifyEmail.count) {
-        session.verifyEmail.count = 1;
+      if (!verifyEmail.count) {
+        verifyEmail.count = 1;
       } else {
-        session.verifyEmail.count++;
+        verifyEmail.count++;
       }
       return res.status(401).json({
         error: true,
         message: "WRONG_CODE",
-        falseCount: session.verifyEmail.count,
+        falseCount: verifyEmail.count,
       });
     }
   } catch (e) {

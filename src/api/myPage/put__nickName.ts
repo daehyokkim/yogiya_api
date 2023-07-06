@@ -3,7 +3,7 @@ import prisma from "../../prisma";
 import SocketServer from "../../socket";
 const put__nickName = async (req: Request, res: Response) => {
   try {
-    const { newNickName } = req.body;
+    const { newNickName, type = "update_nickname" } = req.body;
     const user = req.decodedUser;
     if (!newNickName || typeof newNickName !== "string") {
       return res.status(400).json({
@@ -11,20 +11,22 @@ const put__nickName = async (req: Request, res: Response) => {
         message: "INVALID PARAMS",
       });
     }
-    const socketServer = SocketServer.instance;
-    const mySocket = socketServer.sockets[user.email];
-    if (!mySocket) {
-      return res.status(400).json({
-        error: true,
-        message: "SOCKET ERROR",
+
+    if (type === "update_nickname") {
+      const socketServer = SocketServer.instance;
+      const mySocket = socketServer.sockets[user.email];
+      if (!mySocket) {
+        return res.status(400).json({
+          error: true,
+          message: "SOCKET ERROR",
+        });
+      }
+
+      mySocket.broadcast.to(mySocket.room).email("updateNickName", {
+        email: user.email,
+        newNickName: newNickName,
       });
     }
-
-    mySocket.broadcast.to(mySocket.room).email("updateNickName", {
-      email: user.email,
-      newNickName: newNickName,
-    });
-
     await prisma.user.update({
       where: {
         id: user.id,

@@ -1,31 +1,29 @@
 import bcrypt from "bcrypt";
-// import createHttpError from "http-errors";
 import { Request, Response } from "express";
 import prisma from "../../prisma";
-import { CustomSession } from "../../../interface";
 import {
   generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
 } from "../../utiles/jwt";
 import { JwtPayload } from "jsonwebtoken";
-const post__sign_up = async (req: Request, res: Response) => {
-  const { email, password, nickname = "test", googleFlag = false } = req.body;
-  let session: CustomSession = req.session;
+import Session from "../../session";
 
+const post__sign_up = async (req: Request, res: Response) => {
+  const { email, password, googleFlag = false } = req.body;
   try {
-    if (!email || !password || !nickname) {
+    if (!email || !password) {
       return res.status(400).json({
         error: true,
         message: "INVALID PARAMS",
       });
     }
+    let session = Session.instance;
+    let verifyEmail = session.session[email];
     //오류처리
     if (
       !googleFlag &&
-      (!session.verifyEmail ||
-        session.verifyEmail.email !== email ||
-        !session.verifyEmail.verified)
+      (!verifyEmail || verifyEmail.email !== email || !verifyEmail.verified)
     ) {
       return res.status(400).json({
         error: true,
@@ -41,7 +39,7 @@ const post__sign_up = async (req: Request, res: Response) => {
       data: {
         email: email,
         password: hash,
-        nickname: nickname,
+        nickname: "user",
         googleflag: googleFlag,
       },
     });

@@ -68,6 +68,8 @@
         - 전송받은 이메일 코드를 판단하는 api입니다.
      3. v1/sign/up
         - 최종 회원가입을 위한 api입니다.
+     4. v1/my-page/nick-name
+        - params에 type='sign_up'데이터를 추가해서 보내주기
 
 2. 로그인
 
